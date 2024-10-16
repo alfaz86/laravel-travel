@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -41,5 +42,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+    ];
+
+    const USER = 'user';
+    const ADMIN = 'admin';
+    const DEV = 'dev';
+    const ROLES = [
+        self::USER => 'User',
+        self::ADMIN => 'Admin',
+        self::DEV => 'Dev',
     ];
 }
