@@ -2,11 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
-use App\Models\User;
+use App\Filament\Resources\BusResource\Pages;
+use App\Filament\Resources\BusResource\RelationManagers;
+use App\Models\Bus;
 use Filament\Forms;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -16,30 +15,31 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class UserResource extends Resource
+class BusResource extends Resource
 {
-    protected static ?string $model = User::class;
+    protected static ?string $model = Bus::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static ?string $navigationIcon = 'heroicon-s-list-bullet';
 
-    protected static array|string $routeMiddleware = ['is.dev'];
+    protected static ?string $navigationLabel = 'Daftar Bus';
+
+    protected static ?string $breadcrumb = 'Bus';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 TextInput::make('name')
+                    ->label('Nama Bus')
                     ->required(),
-                TextInput::make('email')
+                TextInput::make('number_plate')
+                    ->label('Plat Nomor'),
+                TextInput::make('type')
+                    ->label('Jenis'),
+                TextInput::make('capacity')
+                    ->label('Kapasitas')
                     ->required(),
-                TextInput::make('password')
-                    ->password()
-                    ->revealable()
-                    ->required(),
-                Select::make('role')
-                    ->options(User::ROLES)
-                    ->native(false)
-                    ->required(),
+
             ]);
     }
 
@@ -48,15 +48,19 @@ class UserResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label('Nama Bus')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('email')
+                TextColumn::make('number_plate')
+                    ->label('Plat Nomor')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('role')
+                TextColumn::make('type')
+                    ->label('Jenis')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('created_at')
+                TextColumn::make('capacity')
+                    ->label('Kapasitas')
                     ->searchable()
                     ->sortable(),
             ])
@@ -83,9 +87,9 @@ class UserResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
-            'create' => Pages\CreateUser::route('/create'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'index' => Pages\ListBuses::route('/'),
+            'create' => Pages\CreateBus::route('/create'),
+            'edit' => Pages\EditBus::route('/{record}/edit'),
         ];
     }
 }
