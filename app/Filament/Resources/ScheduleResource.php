@@ -66,11 +66,8 @@ class ScheduleResource extends Resource
                 TimePicker::make('departure_time')
                     ->label('Waktu Keberangkatan')
                     ->required(),
-                TextInput::make('price')
-                    ->label('Harga')
-                    ->mask(RawJs::make('$money($input)'))
-                    ->stripCharacters(',')
-                    ->numeric()
+                TimePicker::make('arrive_time')
+                    ->label('Waktu Tiba')
                     ->required(),
                 Select::make('origin_id')
                     ->relationship(
@@ -80,6 +77,10 @@ class ScheduleResource extends Resource
                     )
                     ->createOptionForm([
                         Forms\Components\TextInput::make('name')
+                            ->label('Lokasi')
+                            ->required(),
+                        Forms\Components\TextInput::make('regency')
+                            ->label('Kabupaten/Kota')
                             ->required(),
                     ])
                     ->label('Asal')
@@ -92,9 +93,20 @@ class ScheduleResource extends Resource
                     )
                     ->createOptionForm([
                         Forms\Components\TextInput::make('name')
+                            ->label('Lokasi')
+                            ->required(),
+                        Forms\Components\TextInput::make('regency')
+                            ->label('Kabupaten/Kota')
                             ->required(),
                     ])
                     ->label('Tujuan')
+                    ->required(),
+                    
+                TextInput::make('price')
+                    ->label('Harga')
+                    ->mask(RawJs::make('$money($input)'))
+                    ->stripCharacters(',')
+                    ->numeric()
                     ->required(),
             ]);
     }

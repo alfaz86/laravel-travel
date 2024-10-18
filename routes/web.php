@@ -20,7 +20,9 @@ Route::get('/', function () {
 });
 
 Route::prefix('schedule')->group(function () {
+    Route::get('/list', [ScheduleController::class, 'list'])->name('schedule.list');
     Route::post('/search', [ScheduleController::class, 'search'])->name('schedule.search');
+    Route::post('/select-ticket/{schedule}', [ScheduleController::class, 'selectTicket'])->name('schedule.select-ticket');
 });
 
 Route::prefix('location')->group(function () {

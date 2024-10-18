@@ -132,14 +132,14 @@ $(document).ready(function() {
 
     $('#select2-destination-container').on('click', function() {
         if ($('#destination').prop('disabled')) {
-            showToast('Silakan pilih lokasi asal terlebih dahulu sebelum memilih tujuan.');
+            showToast('warning', 'Silakan pilih lokasi asal terlebih dahulu sebelum memilih tujuan.');
             $('#destination').select2('close'); 
         }
     });
 
     $('form').on('submit', function() {
         if (!$('#origin').val() || !$('#destination').val() || !$('#passengers').val() || !$('#date').val()) {
-            showToast('Silakan lengkapi semua data sebelum melanjutkan.');
+            showToast('warning', 'Silakan lengkapi semua data sebelum melanjutkan.');
             return false;
         }
     });
