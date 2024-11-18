@@ -18,6 +18,11 @@ class Schedule extends Model
         'price',
         'origin_id',
         'destination_id',
+        'active_days',
+    ];
+
+    protected $casts = [
+        'active_days' => 'array',
     ];
 
     public function bus()

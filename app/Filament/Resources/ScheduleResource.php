@@ -7,6 +7,7 @@ use App\Filament\Resources\ScheduleResource\RelationManagers;
 use App\Models\Bus;
 use App\Models\Schedule;
 use Filament\Forms;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -17,6 +18,7 @@ use Filament\Resources\Resource;
 use Filament\Support\RawJs;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -108,6 +110,22 @@ class ScheduleResource extends Resource
                     ->stripCharacters(',')
                     ->numeric()
                     ->required(),
+
+                Section::make('Hari Beroperasi')
+                    ->schema([
+                        CheckboxList::make('active_days')
+                            ->label('')
+                            ->options([
+                                'Monday' => 'Senin',
+                                'Tuesday' => 'Selasa',
+                                'Wednesday' => 'Rabu',
+                                'Thursday' => 'Kamis',
+                                'Friday' => 'Jumat',
+                                'Saturday' => 'Sabtu',
+                                'Sunday' => 'Minggu',
+                            ])
+                            ->required(),
+                    ])
             ]);
     }
 
@@ -129,6 +147,10 @@ class ScheduleResource extends Resource
                     ->label('Asal'),
                 TextColumn::make('destination.name')
                     ->label('Tujuan'),
+                ViewColumn::make('active_days')
+                    ->label('Beroperasi')
+                    ->view('filament.tables.columns.active_days_badge')
+                
             ])
             ->filters([
                 //

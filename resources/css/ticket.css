@@ -5,11 +5,14 @@
     border-top: 3px dashed var(--border-color-theme);
     margin: 20px 0;
 }
+.ticket-dash.darker {
+    border-top: 3px dashed var(--dash-darker);
+}
 
 /* Semicircles on left and right side */
 .ticket-dash::before,
 .ticket-dash::after {
-    content: '';
+    /* content: ''; */
     position: absolute;
     top: 50%;
     width: 20px;
@@ -120,6 +123,9 @@
     width: 100%;
     position: relative;
 }
+.dash-line.darker {
+    border-top: 2px dotted var(--dash-darker);
+}
 
 .location-icon {
     font-size: 20px;
@@ -145,9 +151,31 @@
     transform: translateX(-50%);
     top: 45%;
 }
+.dot.darker {
+    background-color: var(--dash-darker);
+}
 
 /* ----- */
 
 .card-ticket {
     cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.search-result {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: white; 
+    margin-left: -16px;
+    margin-right: -16px;
+}
+
+.card-ticket.selected {
+    border: 2px solid #4F46E5;
+    background-color: rgb(199 210 254 / var(--tw-bg-opacity));
+}
+
+#checkoutButton {
+    max-width: 150px;
 }

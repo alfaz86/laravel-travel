@@ -10,7 +10,7 @@
 </div>
 
 <script>
-    function showToast(type, message) {
+    function showToast(type, message, time=2000) {
         // Menampilkan toast
         var toastTemplate = $(`#toast-${type}`).clone().removeAttr('id').removeClass('hidden');
         toastTemplate.find(`#toast-${type}-message`).text(message);
@@ -19,7 +19,7 @@
         // Menampilkan toast dengan animasi
         setTimeout(() => {
             toastTemplate.fadeOut(300, function() { $(this).remove(); });
-        }, 2000); // Menghilang setelah 3 detik
+        }, time); // Menghilang setelah 3 detik
     }
 </script>
 
