@@ -9,10 +9,10 @@ export default defineConfig({
         }),
     ],
     server: {
-        host: '192.168.1.9',
+        host: process.env.VITE_DEV_SERVER_HOST ?? 'localhost',
         port: 5173,
         hmr: {
-            host: '192.168.1.9',
+            host: process.env.VITE_DEV_SERVER_HOST ?? 'localhost',
             port: 5173,
         },
     },

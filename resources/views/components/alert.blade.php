@@ -1,3 +1,4 @@
+<!-- Toast Warning -->
 <div id="toast-warning" class="hidden flex items-center w-full max-w-xs p-4 text-gray-500 bg-indigo-50 rounded-lg shadow-lg dark:text-gray-400 dark:bg-gray-800 mb-1" role="alert">
     <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-orange-500 bg-orange-100 rounded-lg dark:bg-orange-700 dark:text-orange-200">
         <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -5,19 +6,27 @@
         </svg>
         <span class="sr-only">Warning icon</span>
     </div>
-    <div class="ms-3 text-sm font-normal" id="toast-message">Improve password difficulty.</div>
+    <div class="ms-3 text-sm font-normal" id="toast-warning-message">Improve password difficulty.</div>
 </div>
 
 <script>
-    function showToast(message) {
+    function showToast(type, message, time=2000) {
         // Menampilkan toast
-        var toastTemplate = $('#toast-warning').clone().removeAttr('id').removeClass('hidden');
-        toastTemplate.find('#toast-message').text(message);
+        var toastTemplate = $(`#toast-${type}`).clone().removeAttr('id').removeClass('hidden');
+        toastTemplate.find(`#toast-${type}-message`).text(message);
         $('#toast-container').append(toastTemplate);
         
         // Menampilkan toast dengan animasi
         setTimeout(() => {
             toastTemplate.fadeOut(300, function() { $(this).remove(); });
-        }, 2000); // Menghilang setelah 3 detik
+        }, time); // Menghilang setelah 3 detik
     }
 </script>
+
+@if(session('alert'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            showToast('warning', '{{ session('alert') }}');
+        });
+    </script>
+@endif

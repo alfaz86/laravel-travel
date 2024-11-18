@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('locations', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('regency');
-            $table->timestamps();
+        Schema::table('schedules', function (Blueprint $table) {
+            $table->json('active_days')->nullable();
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('locations');
+        Schema::table('schedules', function (Blueprint $table) {
+            $table->dropColumn('active_days');
+        });
     }
 };

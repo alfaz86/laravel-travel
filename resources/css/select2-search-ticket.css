@@ -2,6 +2,7 @@
     --indigo-theme: rgb(99 102 241);
     --border-color-theme: rgb(209 213 219);
     --card-color-theme: rgb(238 242 255);
+    --dash-darker: #9CA3AF;
 }
 
 .select2-container--default .select2-selection--single {

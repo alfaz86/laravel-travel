@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('bus_id')->constrained()->cascadeOnDelete();
             $table->string('departure_time');
+            $table->string('arrive_time');
             $table->integer('available_seats');
             $table->bigInteger('price');
             $table->string('origin_id');

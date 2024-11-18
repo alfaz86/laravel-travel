@@ -23,7 +23,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
             </svg>
             <div class="flex-grow">
-                <label for="origin" class="block text-sm font-medium text-gray-700">Tujuan</label>
+                <label for="destination" class="block text-sm font-medium text-gray-700">Tujuan</label>
                 <select id="destination" name="destination" class="bg-indigo-50 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-500 w-full select2" disabled>
                     <option value="">Pilih lokasi</option>
                 </select>
@@ -84,11 +84,35 @@ $(document).ready(function() {
                     results: data.items.map(item => {
                         return {
                             id: item.id,
-                            text: item.name
+                            text: item.name,
+                            regency: item.regency ?? null,
                         };
                     })
                 };
             },
+        },
+        templateResult: function(data) {
+            if (!data.regency) {
+                return data.text
+            }
+            
+            var $container = $(
+                "<div class='select2-result-repository clearfix'>" +
+                "<div class='select2-result-repository__meta'>" +
+                    "<div class='select2-result-repository__title text-md font-medium'></div>" +
+                    "<div class='select2-result-repository__regency text-sm' style='margin-top:-5px'></div>" +
+                    "</div>" +
+                "</div>" +
+                "</div>"
+            );
+
+            $container.find(".select2-result-repository__title").text(data.text);
+            $container.find(".select2-result-repository__regency").text(data.regency);
+
+            return $container;
+        },
+        templateSelection: function(data) {
+            return data.text || data.id;
         },
     });
 
@@ -113,12 +137,36 @@ $(document).ready(function() {
                     results: data.items.map(item => {
                         return {
                             id: item.id,
-                            text: item.name
+                            text: item.name,
+                            regency: item.regency ?? null,
                         };
                     })
                 };
             },
-        }
+        },
+        templateResult: function(data) {
+            if (!data.regency) {
+                return data.text
+            }
+            
+            var $container = $(
+                "<div class='select2-result-repository clearfix'>" +
+                "<div class='select2-result-repository__meta'>" +
+                    "<div class='select2-result-repository__title text-md font-medium'></div>" +
+                    "<div class='select2-result-repository__regency text-sm' style='margin-top:-5px'></div>" +
+                    "</div>" +
+                "</div>" +
+                "</div>"
+            );
+
+            $container.find(".select2-result-repository__title").text(data.text);
+            $container.find(".select2-result-repository__regency").text(data.regency);
+
+            return $container;
+        },
+        templateSelection: function(data) {
+            return data.text || data.id;
+        },
     });
 
     $('#origin').on('change', function() {
@@ -132,14 +180,14 @@ $(document).ready(function() {
 
     $('#select2-destination-container').on('click', function() {
         if ($('#destination').prop('disabled')) {
-            showToast('Silakan pilih lokasi asal terlebih dahulu sebelum memilih tujuan.');
+            showToast('warning', 'Silakan pilih lokasi asal terlebih dahulu sebelum memilih tujuan.');
             $('#destination').select2('close'); 
         }
     });
 
     $('form').on('submit', function() {
         if (!$('#origin').val() || !$('#destination').val() || !$('#passengers').val() || !$('#date').val()) {
-            showToast('Silakan lengkapi semua data sebelum melanjutkan.');
+            showToast('warning', 'Silakan lengkapi semua data sebelum melanjutkan.');
             return false;
         }
     });

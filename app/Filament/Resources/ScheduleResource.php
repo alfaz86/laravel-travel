@@ -7,6 +7,7 @@ use App\Filament\Resources\ScheduleResource\RelationManagers;
 use App\Models\Bus;
 use App\Models\Schedule;
 use Filament\Forms;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -17,6 +18,7 @@ use Filament\Resources\Resource;
 use Filament\Support\RawJs;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -66,11 +68,8 @@ class ScheduleResource extends Resource
                 TimePicker::make('departure_time')
                     ->label('Waktu Keberangkatan')
                     ->required(),
-                TextInput::make('price')
-                    ->label('Harga')
-                    ->mask(RawJs::make('$money($input)'))
-                    ->stripCharacters(',')
-                    ->numeric()
+                TimePicker::make('arrive_time')
+                    ->label('Waktu Tiba')
                     ->required(),
                 Select::make('origin_id')
                     ->relationship(
@@ -80,6 +79,10 @@ class ScheduleResource extends Resource
                     )
                     ->createOptionForm([
                         Forms\Components\TextInput::make('name')
+                            ->label('Lokasi')
+                            ->required(),
+                        Forms\Components\TextInput::make('regency')
+                            ->label('Kabupaten/Kota')
                             ->required(),
                     ])
                     ->label('Asal')
@@ -92,10 +95,37 @@ class ScheduleResource extends Resource
                     )
                     ->createOptionForm([
                         Forms\Components\TextInput::make('name')
+                            ->label('Lokasi')
+                            ->required(),
+                        Forms\Components\TextInput::make('regency')
+                            ->label('Kabupaten/Kota')
                             ->required(),
                     ])
                     ->label('Tujuan')
                     ->required(),
+                    
+                TextInput::make('price')
+                    ->label('Harga')
+                    ->mask(RawJs::make('$money($input)'))
+                    ->stripCharacters(',')
+                    ->numeric()
+                    ->required(),
+
+                Section::make('Hari Beroperasi')
+                    ->schema([
+                        CheckboxList::make('active_days')
+                            ->label('')
+                            ->options([
+                                'Monday' => 'Senin',
+                                'Tuesday' => 'Selasa',
+                                'Wednesday' => 'Rabu',
+                                'Thursday' => 'Kamis',
+                                'Friday' => 'Jumat',
+                                'Saturday' => 'Sabtu',
+                                'Sunday' => 'Minggu',
+                            ])
+                            ->required(),
+                    ])
             ]);
     }
 
@@ -117,6 +147,10 @@ class ScheduleResource extends Resource
                     ->label('Asal'),
                 TextColumn::make('destination.name')
                     ->label('Tujuan'),
+                ViewColumn::make('active_days')
+                    ->label('Beroperasi')
+                    ->view('filament.tables.columns.active_days_badge')
+                
             ])
             ->filters([
                 //
