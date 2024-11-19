@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 
 trait ApiResponse
@@ -65,5 +66,24 @@ trait ApiResponse
     protected function unauthorizedResponse(string $message = 'Unauthorized'): JsonResponse
     {
         return $this->errorResponse($message, 401);
+    }
+
+    /**
+     * Response for validation error
+     *
+     * @param mixed|null $errors
+     * @param string $message
+     * @param int $status
+     * @return JsonResponse
+     */
+    protected function validationResponse($errors = null, string $message = 'Validation errors', int $status = 422): JsonResponse
+    {
+        throw new HttpResponseException(
+            response()->json([
+                'status' => 'error',
+                'message' => $message,
+                'data' => $errors,
+            ], $status)
+        );
     }
 }
