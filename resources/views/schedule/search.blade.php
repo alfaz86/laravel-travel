@@ -10,7 +10,7 @@
             </svg>
             <div class="flex-grow">
                 <label for="origin" class="block text-sm font-medium text-gray-700">Keberangkatan</label>
-                <select id="origin" name="origin" class="bg-indigo-50 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-500 w-full select2">
+                <select data-search="true" id="origin" name="origin" class="bg-indigo-50 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-500 w-full select2">
                     <option value="">Pilih lokasi</option>
                 </select>
             </div>
@@ -24,7 +24,7 @@
             </svg>
             <div class="flex-grow">
                 <label for="destination" class="block text-sm font-medium text-gray-700">Tujuan</label>
-                <select id="destination" name="destination" class="bg-indigo-50 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-500 w-full select2" disabled>
+                <select data-search="true" id="destination" name="destination" class="bg-indigo-50 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-500 w-full select2" disabled>
                     <option value="">Pilih lokasi</option>
                 </select>
             </div>
@@ -37,7 +37,7 @@
             </svg>
             <div class="flex-grow">
                 <label for="origin" class="block text-sm font-medium text-gray-700">Jumlah Penumpang</label>
-                <input type="number" id="passengers" name="passengers" placeholder="1" value="1" class="bg-indigo-50 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-500 w-full">
+                <input data-search="true" type="number" id="passengers" name="passengers" placeholder="1" value="1" class="bg-indigo-50 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-500 w-full">
             </div>
         </div>
     
@@ -48,7 +48,7 @@
             </svg>
             <div class="flex-grow">
                 <label for="origin" class="block text-sm font-medium text-gray-700">Jadwal</label>
-                <input input type="date" id="date" name="date" class="bg-indigo-50 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-500 w-full" min="{{ date('Y-m-d') }}">
+                <input data-search="true" type="date" id="date" name="date" class="bg-indigo-50 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-500 w-full" min="{{ date('Y-m-d') }}">
             </div>
         </div>
     </div>

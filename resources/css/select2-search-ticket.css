@@ -40,13 +40,13 @@
     background-color: var(--indigo-theme) !important;
 }
 
-input {
+input[data-search="true"] {
     border: 0px;
     padding: 0px !important;
     border-bottom: 2px solid var(--border-color-theme) !important;
 }
 
-input:focus {
+input:focus[data-search="true"] {
     outline: none !important;
     box-shadow: none !important;
     border: 0px !important;

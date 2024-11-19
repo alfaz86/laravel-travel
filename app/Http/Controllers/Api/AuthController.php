@@ -25,7 +25,9 @@ class AuthController extends ApiController
             $user = User::create([
                 'name' => $request->get('name'),
                 'email' => $request->get('email'),
+                'phone' => $request->get('phone'),
                 'password' => Hash::make($request->get('password')),
+                'role' => User::USER,
             ]);
 
             // Membuat token untuk user

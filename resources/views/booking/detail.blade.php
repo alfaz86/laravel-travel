@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container mx-auto my-8">
-    <h3 class="text-2xl font-bold mb-5 text-center">Detail Booking</h3>
+    <h3 class="text-2xl font-bold mb-5 text-center hidden sm:block">Detail Booking</h3>
 
     <!-- Table Wrapper -->
     <div class="overflow-x-auto">
@@ -37,8 +37,7 @@
     </div>
 
     <!-- Passenger Data -->
-    <h3 class="text-xl font-bold mt-10 mb-4 text-center">Data Penumpang</h3>
-    <div class="card bg-white shadow-md rounded-lg p-6">
+    <div class="card bg-white shadow-md rounded-lg p-6 mb-5 mt-3">
         <div class="card-body">
             <form action="#" method="post" class="space-y-4">
                 @csrf
@@ -54,12 +53,13 @@
                     <label for="phone" class="block text-sm font-medium text-gray-700">Nomor Telepon</label>
                     <input type="text" name="phone" id="phone" class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
                 </div>
-                <button type="submit" class="w-full bg-indigo-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-700">
-                    Konfirmasi
-                </button>
             </form>
         </div>
     </div>
+
+    <button type="button" class="w-full bg-indigo-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-700">
+        Pesan
+    </button>
 </div>
 
 @include('components.alert')

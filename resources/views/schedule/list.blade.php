@@ -118,7 +118,7 @@
             return;
         }
 
-        const isLoggedIn = await checkLoginStatus();
+        const isLoggedIn = checkLoginStatus();
         if (!isLoggedIn) {
             showToast('warning', 'Silakan login terlebih dahulu untuk melanjutkan.', 15000);
             window.location.href = '/auth/login'; // Redirect ke halaman login
@@ -148,7 +148,7 @@
 
             // Jika request berhasil, Anda bisa menambahkan logika tambahan di sini, misalnya redirect atau update UI
             // Contoh: window.location.href = '/next-page';
-
+            window.location.href = '/booking/detail';
         } catch (error) {
             // Tangani error dengan menampilkan toast
             showToast('error', 'Terjadi kesalahan saat memproses checkout.', 5000);
