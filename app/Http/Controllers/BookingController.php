@@ -10,14 +10,14 @@ class BookingController extends Controller
 {
     public function detail(Request $request)
     {
-        $cache_booking_tickets = Cache::get('booking_tickets_' . session()->getId(), []);
+        $cache_booking_ticket = Cache::get('booking_tickets_' . session()->getId(), []);
 
-        if (empty($cache_booking_tickets)) {
+        if (empty($cache_booking_ticket)) {
             return redirect('/')->with('alert', 'Terjadi kesalahan.');
         }
 
-        $schedules = Schedule::whereIn('id', $cache_booking_tickets)->get();
+        $schedule = Schedule::where('id', $cache_booking_ticket)->first();
 
-        return view('booking.detail', compact('schedules'));
+        return view('booking.detail', compact('schedule'));
     }
 }

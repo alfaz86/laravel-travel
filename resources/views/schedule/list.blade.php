@@ -15,10 +15,10 @@
             <p class="text-gray-600">Tujuan: {{ $destination['name'] }}</p>
             <a href="/" class="text-indigo-500 hover:text-indigo-700">Ubah Pencarian</a>
         </div>
-        <!-- Checkout Button -->
+        <!-- Continue Button -->
         <div>
             <button id="checkoutButton" type="button" class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full">
-                Checkout <span id="selectedCount">(0)</span>
+                Lanjutkan
             </button>
         </div>
     </div>
@@ -78,15 +78,15 @@
 
 <form id="scheduleForm" method="POST" action="{{ route('schedule.select-ticket') }}">
     @csrf
-    <input type="hidden" name="schedule_ids" id="scheduleIdInput"> <!-- Kirim sebagai string -->
+    <input type="hidden" name="schedule_id" id="scheduleIdInput"> <!-- Kirim hanya satu schedule_id -->
 </form>
 
 @include('components.alert')
 @endsection
 
-@section('scripts')
+@push('scripts')
 <script>
-    let selectedSchedules = [];
+    let selectedSchedule = null;
 
     $('.card-ticket').on('click', function() {
         let scheduleId = $(this).data('schedule-id');
@@ -95,26 +95,29 @@
         let cardDashLine = $(this).find('.dash-line');
         let cardDot = $(this).find('.dot');
 
-        if (selectedSchedules.includes(scheduleId)) {
-            selectedSchedules = selectedSchedules.filter(id => id !== scheduleId);
+        // Deselect if already selected
+        if (selectedSchedule === scheduleId) {
+            selectedSchedule = null;
             card.removeClass('selected');
             cardDash.removeClass('darker');
             cardDashLine.removeClass('darker');
             cardDot.removeClass('darker');
         } else {
-            selectedSchedules.push(scheduleId);
+            selectedSchedule = scheduleId;
+            $('.card-ticket').removeClass('selected');
+            $('.ticket-dash').removeClass('darker');
+            $('.dash-line').removeClass('darker');
+            $('.dot').removeClass('darker');
             card.addClass('selected');
             cardDash.addClass('darker');
             cardDashLine.addClass('darker');
             cardDot.addClass('darker');
         }
-
-        $('#selectedCount').text(`(${selectedSchedules.length})`);
     });
 
     $('#checkoutButton').on('click', async function() {
-        if (selectedSchedules.length === 0) {
-            showToast('warning', 'Pilih setidaknya satu tiket untuk melanjutkan.');
+        if (!selectedSchedule) {
+            showToast('warning', 'Pilih jadwal untuk melanjutkan.');
             return;
         }
 
@@ -125,26 +128,16 @@
             return;
         }
 
-        const token = localStorage.getItem('jwt_token');
-
-        // Pastikan token ada sebelum melanjutkan
-        if (!token) {
-            showToast('warning', 'Token tidak ditemukan. Silakan login ulang.');
-            return;
-        }
-
         // Menambahkan token ke header Authorization menggunakan axios
         try {
+            const token = localStorage.getItem('jwt_token');
             const result = await axios.post('/schedule/select-ticket', {
-                schedule_ids: selectedSchedules.join(',')
+                schedule_id: selectedSchedule
             }, {
                 headers: {
                     'Authorization': `Bearer ${token}` // Menambahkan token ke header
                 }
             });
-
-            // Log hasil dari permintaan
-            console.log(result);
 
             // Jika request berhasil, Anda bisa menambahkan logika tambahan di sini, misalnya redirect atau update UI
             // Contoh: window.location.href = '/next-page';
@@ -165,8 +158,6 @@
                 console.error('Request error:', error.request);
             }
         }
-
     });
-
 </script>
-@endsection
+@endpush
