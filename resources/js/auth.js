@@ -33,7 +33,6 @@ async function register(name, email, phone, password, password_confirmation) {
         });
         const apiResponse = response.data;
         if (apiResponse && apiResponse.data.token) {
-            console.log(apiResponse);
             const token = apiResponse.data.token;
 
             // Simpan JWT
