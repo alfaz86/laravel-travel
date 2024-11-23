@@ -31,7 +31,18 @@ async function register(name, email, phone, password, password_confirmation) {
             password,
             password_confirmation
         });
-        return response.data;
+        const apiResponse = response.data;
+        if (apiResponse && apiResponse.data.token) {
+            const token = apiResponse.data.token;
+
+            // Simpan JWT
+            localStorage.setItem('jwt_token', token);
+
+            // Simpan payload pengguna
+            saveAuthUserLogin(token);
+
+            return response.data;
+        }
     } catch (error) {
         if (error.response && error.response.data) {
             return error.response.data;
