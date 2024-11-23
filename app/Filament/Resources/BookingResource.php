@@ -9,6 +9,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -31,7 +32,18 @@ class BookingResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('ticket_number')
+                    ->label('Tiket'),
+                TextColumn::make('passenger_name')
+                    ->label('Nama Penumpang'),
+                TextColumn::make('passenger_phone')
+                    ->label('Nomer Telepon'),
+                TextColumn::make('total_price')
+                    ->label('Total Harga')
+                    ->money('IDR', 0, 'id-ID'),
+                TextColumn::make('payment_status')
+                    ->label('Status Pembayaran')
+                    ->view('filament.tables.columns.status_badge'),
             ])
             ->filters([
                 //

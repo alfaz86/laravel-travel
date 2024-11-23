@@ -50,7 +50,7 @@
 @include('components.alert')
 @endsection
 
-@section('scripts')
+@push('scripts')
 <script>
     document.querySelector('#registerForm').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -94,4 +94,4 @@
     });
 
 </script>
-@endsection
+@endpush

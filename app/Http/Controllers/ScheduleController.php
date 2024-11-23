@@ -59,16 +59,14 @@ class ScheduleController extends Controller
 
     public function selectTicket(Request $request)
     {
-        $scheduleIds = $request->input('schedule_ids');
+        $scheduleId = $request->input('schedule_id');
 
-        if (empty($scheduleIds)) {
+        if (empty($scheduleId)) {
             return redirect()->back()->with('error', 'Tidak ada tiket yang dipilih.');
         }
 
-        $scheduleIds = explode(',', $request->input('schedule_ids'));
-
-        Cache::put('booking_tickets_' . session()->getId(), $scheduleIds, now()->addMinutes(30));
+        Cache::put('booking_tickets_' . session()->getId(), $scheduleId, now()->addMinutes(30));
         
-        return response()->json($scheduleIds);
+        return response()->json($scheduleId);
     }
 }

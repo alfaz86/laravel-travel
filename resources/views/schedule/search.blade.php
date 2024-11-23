@@ -61,7 +61,7 @@
     </div>
 </form>
 
-@section('scripts')
+@push('scripts')
 <script>
 $(document).ready(function() {
     $('#origin').select2({
@@ -193,4 +193,4 @@ $(document).ready(function() {
     });
 });
 </script>
-@endsection
+@endpush

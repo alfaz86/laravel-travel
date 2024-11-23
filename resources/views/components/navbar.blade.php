@@ -93,8 +93,9 @@
     </div>
 </nav>
 
+@push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    $(function () {
         const authUser = getAuthUser();
         const authUserProfile = document.querySelectorAll('.user-name, .user-email');
 
@@ -144,3 +145,4 @@
         }
     }
 </script>
+@endpush

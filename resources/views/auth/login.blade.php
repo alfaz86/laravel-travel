@@ -27,7 +27,7 @@
 @include('components.alert')
 @endsection
 
-@section('scripts')
+@push('scripts')
 <script>
     document.querySelector('#loginForm').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -47,4 +47,4 @@
         }
     });
 </script>
-@endsection
+@endpush

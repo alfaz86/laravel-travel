@@ -44,6 +44,7 @@ Route::prefix('location')->group(function () {
 
 Route::prefix('booking')->group(function () {
     Route::get('/detail', [BookingController::class, 'detail'])->name('booking.detail');
+    Route::get('/detail/{ticketNumber}', [BookingController::class, 'myBookingDetail'])->name('booking.detail.me');
 });
 
 // only for development
