@@ -27,6 +27,8 @@ class Booking extends Model
         'quantity',
         'total_price',
         'payment_status',
+        'passenger_name',
+        'passenger_phone',
     ];
 
     public function schedule()

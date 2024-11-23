@@ -38,11 +38,11 @@
                 </tr>
                 <tr class="hover:bg-gray-50">
                     <td class="border border-gray-300 px-4 py-2 font-semibold">Jumlah Tiket</td>
-                    <td class="border border-gray-300 px-4 py-2">{{ $schedule->qty ?? 1 }}</td>
+                    <td class="border border-gray-300 px-4 py-2" id="passengers"></td>
                 </tr>
                 <tr class="bg-gray-50 font-bold">
                     <td class="border border-gray-300 px-4 py-2" colspan="1">Total</td>
-                    <td class="border border-gray-300 px-4 py-2">IDR {{ number_format($schedule->price, 0, ',', '.') }}</td>
+                    <td class="border border-gray-300 px-4 py-2" id="total-price"></td>
                 </tr>
             </tbody>
         </table>
@@ -85,7 +85,14 @@
         const isUserCheckbox = document.getElementById('is_user');
         const nameInput = document.getElementById('name');
         const phoneInput = document.getElementById('phone');
-        console.log(isUserCheckbox);
+        const schedule = @json($schedule);
+        const searchSchedule = @json(Cache::get('schedules_' . session()->getId()));
+        const passengers = document.getElementById('passengers');
+        const totalPrice = document.getElementById('total-price');
+        const total_price = schedule.price * searchSchedule.passengers;
+
+        passengers.textContent = searchSchedule.passengers;
+        totalPrice.textContent = `IDR ${total_price.toLocaleString('id-ID')}`;
         
         $('#is_user').on('change', function () {
             if ($(this).is(':checked')) {
@@ -96,13 +103,12 @@
                 $('#phone').val('');
             }
         });
-
     
         bookingButton.addEventListener('click', async () => {
+            const token = localStorage.getItem('jwt_token');
             const isUser = isUserCheckbox.checked;
             const name = nameInput.value;
             const phone = phoneInput.value;
-            const token = localStorage.getItem('jwt_token');
     
             if (!isUser && (!name || !phone)) {
                 return alert('Nama dan Nomor Telepon harus diisi');
@@ -116,16 +122,18 @@
                     'Authorization': 'Bearer ' + token
                 },
                 body: JSON.stringify({
-                    is_user: isUser,
-                    name,
-                    phone
+                    passenger_name: name,
+                    passenger_phone: phone,
+                    quantity: searchSchedule.passengers,
+                    schedule_id: schedule.id,
+                    total_price,
                 })
             });
     
             const data = await response.json();
     
             if (response.ok) {
-                // window.location.href = data.redirect;
+                window.location.href = data.data.redirect;
             } else {
                 alert(data.message);
             }

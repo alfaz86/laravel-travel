@@ -31,9 +31,10 @@ class CreateBookingRequest extends FormRequest
     {
         return [
             'schedule_id' => ['required', 'exists:schedules,id'],
-            'user_id' => ['required', 'exists:users,id'],
             'quantity' => ['required', 'integer', 'min:1'],
             'total_price' => ['required', 'integer'],
+            'passenger_name' => ['required', 'string'],
+            'passenger_phone' => ['required', 'string'],
         ];
     }
 
@@ -42,5 +43,26 @@ class CreateBookingRequest extends FormRequest
         if ($validator->fails()) {
             return $this->validationResponse($validator->errors());
         }
+    }
+
+    /**
+     * Get the validated data from the request.
+     * This adds the user_id automatically from the authenticated user.
+     *
+     * @param string|null $key
+     * @param mixed $default
+     * @return array|mixed
+     */
+    public function validated($key = null, $default = null)
+    {
+        $data = parent::validated();
+        $data['user_id'] = auth()->id();
+
+        // Jika $key diberikan, return nilai spesifik
+        if ($key) {
+            return data_get($data, $key, $default);
+        }
+
+        return $data;
     }
 }

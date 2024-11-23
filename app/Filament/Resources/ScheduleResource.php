@@ -142,7 +142,7 @@ class ScheduleResource extends Resource
                     ->label('Kursi Tersedia'),
                 TextColumn::make('price')
                     ->label('Harga')
-                    ->money('IDR'),
+                    ->money('IDR', 0, 'id-ID'),
                 TextColumn::make('origin.name')
                     ->label('Asal'),
                 TextColumn::make('destination.name')
