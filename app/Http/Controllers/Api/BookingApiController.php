@@ -26,13 +26,13 @@ class BookingApiController extends ApiController
 
         try {
             // Generate unique ticket number
-            $ticketNumber = $this->generateTicketNumber();
+            $bookingNumber = $this->generateBookingNumber();
 
             // Create booking record
             $booking = Booking::create([
                 'schedule_id' => $validatedData['schedule_id'],
                 'user_id' => $validatedData['user_id'],
-                'ticket_number' => $ticketNumber,
+                'booking_number' => $bookingNumber,
                 'quantity' => $validatedData['quantity'],
                 'total_price' => $validatedData['total_price'],
                 'passenger_name' => $validatedData['passenger_name'],
@@ -45,7 +45,7 @@ class BookingApiController extends ApiController
 
             $data = [
                 ...$booking->toArray(),
-                'redirect' => route('booking.detail.me', ['ticketNumber' => $booking->ticket_number]),
+                'redirect' => route('booking.detail.number', ['bookingNumber' => $booking->booking_number]),
             ];
 
             return $this->successResponse($data, 'Booking created successfully', 201);
@@ -62,11 +62,30 @@ class BookingApiController extends ApiController
      *
      * @return string
      */
-    private function generateTicketNumber(): string
+    private function generateBookingNumber(): string
     {
         $randomString = Str::random(12);
         $timestamp = now()->timestamp;
 
-        return "TICKET-$randomString-$timestamp";
+        return "BID-$randomString-$timestamp";
+    }
+
+    /**
+     * Get booking detail.
+     *
+     * @param Request $request
+     * @param string $bookingNumber
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function list(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        $bookings = Booking::where('user_id', $user->id)
+            ->with('schedule')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return $this->successResponse($bookings, 'List of bookings');
     }
 }

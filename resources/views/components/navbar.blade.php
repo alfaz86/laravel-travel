@@ -15,8 +15,19 @@
                 </div>
 
                 <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-                    <a href="/" class="inline-flex items-center px-1 pt-1 border-b-2 border-indigo-500 text-sm font-medium text-gray-900">Home</a>
-                    <a href="#" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Transaksi</a>
+                    <a href="/" 
+                       class="inline-flex items-center px-1 pt-1 border-b-2 
+                              {{ Request::is('/') ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500' }} 
+                              text-sm font-medium">
+                        Home
+                    </a>
+                
+                    <a href="{{ route('booking.list.page') }}" 
+                       class="inline-flex items-center px-1 pt-1 border-b-2 
+                              {{ Route::is('booking.list.page') ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500' }} 
+                              text-sm font-medium hover:border-gray-300 hover:text-gray-700">
+                        Booking saya
+                    </a>
                 </div>
             </div>
 
@@ -77,8 +88,17 @@
     <!-- Mobile menu -->
     <div class="sm:hidden hidden" id="mobile-menu">
         <div class="space-y-1 pt-2 pb-3">
-            <a href="/" class="block pl-3 pr-4 py-2 border-l-4 border-indigo-500 text-base font-medium text-indigo-700 bg-indigo-50">Home</a>
-            <a href="#" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800">Transaksi</a>
+            <a href="/" 
+               class="block pl-3 pr-4 py-2 border-l-4 
+                      {{ Request::is('/') ? 'border-indigo-500 text-indigo-700 bg-indigo-50' : 'border-transparent text-gray-600' }}">
+               Home
+            </a>
+        
+            <a href="{{ route('booking.list.page') }}" 
+               class="block pl-3 pr-4 py-2 border-l-4 
+                      {{ Route::is('booking.list.page') ? 'border-indigo-500 text-indigo-700 bg-indigo-50' : 'border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800' }}">
+               Booking saya
+            </a>
         </div>
         <div class="border-t border-gray-200 pt-4 pb-3" id="mobile-menu-login" style="display: none;">
             <a href="{{ route('auth.login') }}" class="block pl-3 pr-4 py-2 text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800">Login</a>

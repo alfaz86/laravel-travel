@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('schedule_id')->constrained();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->string('ticket_number');
+            $table->string('booking_number')->unique();
             $table->integer('quantity');
             $table->decimal('total_price', 10, 2);
             $table->enum('payment_status', Booking::STATUS)->default(Booking::STATUS_PENDING);
