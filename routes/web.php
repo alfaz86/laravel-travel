@@ -20,6 +20,10 @@ Route::get('/', function () {
     return view('index');
 });
 
+Route::get('/qr-reader', function () {
+    return view('qr-reader');
+});
+
 Route::prefix('auth')->group(function () {
     Route::get('/login', function () {
         return view('auth.login');
@@ -43,8 +47,10 @@ Route::prefix('location')->group(function () {
 });
 
 Route::prefix('booking')->group(function () {
+    Route::get('/list', [BookingController::class, 'list'])->name('booking.list.page');
     Route::get('/detail', [BookingController::class, 'detail'])->name('booking.detail');
-    Route::get('/detail/{ticketNumber}', [BookingController::class, 'myBookingDetail'])->name('booking.detail.me');
+    Route::get('/detail/{bookingNumber}', [BookingController::class, 'detailNumber'])->name('booking.detail.number');
+    Route::get('/detail/ticket/{ticketNumber}', [BookingController::class, 'detailTicket'])->name('booking.detail.ticket');
 });
 
 // only for development

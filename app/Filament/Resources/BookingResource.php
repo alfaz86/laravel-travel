@@ -10,6 +10,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -32,12 +33,15 @@ class BookingResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('ticket_number')
-                    ->label('Tiket'),
+                TextColumn::make('booking_number')
+                    ->label('No Booking')
+                    ->searchable('booking_number'),
                 TextColumn::make('passenger_name')
-                    ->label('Nama Penumpang'),
+                    ->label('Nama Penumpang')
+                    ->searchable('passenger_name'),
                 TextColumn::make('passenger_phone')
-                    ->label('Nomer Telepon'),
+                    ->label('Nomer Telepon')
+                    ->searchable('passenger_phone'),
                 TextColumn::make('total_price')
                     ->label('Total Harga')
                     ->money('IDR', 0, 'id-ID'),
@@ -46,15 +50,16 @@ class BookingResource extends Resource
                     ->view('filament.tables.columns.status_badge'),
             ])
             ->filters([
-                //
+                SelectFilter::make('payment_status')
+                    ->options(Booking::STATUS_OPTIONS)
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                // Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
             ]);
     }
 
@@ -69,8 +74,8 @@ class BookingResource extends Resource
     {
         return [
             'index' => Pages\ListBookings::route('/'),
-            'create' => Pages\CreateBooking::route('/create'),
-            'edit' => Pages\EditBooking::route('/{record}/edit'),
+            // 'create' => Pages\CreateBooking::route('/create'),
+            // 'edit' => Pages\EditBooking::route('/{record}/edit'),
         ];
     }
 }

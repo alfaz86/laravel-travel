@@ -14,6 +14,13 @@ class Booking extends Model
     const STATUS_CANCEL = 'cancel';
     const STATUS_REFUND = 'refund';
     const STATUS = [
+        self::STATUS_PENDING,
+        self::STATUS_PAID,
+        self::STATUS_CANCEL,
+        self::STATUS_REFUND,
+    ];
+
+    const STATUS_OPTIONS = [
         self::STATUS_PENDING => 'Pending',
         self::STATUS_PAID => 'Paid',
         self::STATUS_CANCEL => 'Cancel',
@@ -23,10 +30,11 @@ class Booking extends Model
     protected $fillable = [
         'schedule_id',
         'user_id',
-        'ticket_number',
+        'booking_number',
         'quantity',
         'total_price',
         'payment_status',
+        'snap_token',
         'passenger_name',
         'passenger_phone',
     ];
@@ -39,5 +47,10 @@ class Booking extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
     }
 }
