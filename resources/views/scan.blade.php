@@ -20,8 +20,9 @@
 
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
   <script>
+    var appUrl = window.location.origin;
     new QRCode(document.getElementById("qrcode"), {
-      text: "{{ env('APP_URL', 'http://localhost') }}",
+      text: appUrl,
       width: 256,
       height: 256,
       colorDark: "#000000",

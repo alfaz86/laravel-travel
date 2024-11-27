@@ -11,9 +11,12 @@
         <div>
             <h2 class="text-xl font-bold">Hasil Pencarian</h2>
             <p class="text-gray-600">{{ $date->locale('id')->isoFormat('dddd, D MMMM YYYY') }}</p>
-            <p class="text-gray-600">Keberangkatan: {{ $origin['name'] }}</p>
-            <p class="text-gray-600">Tujuan: {{ $destination['name'] }}</p>
-            <a href="/" class="text-indigo-500 hover:text-indigo-700">Ubah Pencarian</a>
+            <p class="text-gray-600">Rute <b>{{ $origin['name'] }} - {{ $destination['name'] }}</b></p>
+            <p class="text-gray-600">Untuk <b>{{ $passengers }}</b> orang.</p>
+            <form method="GET" action="{{ route('home') }}">
+                <input type="hidden" name="change-search" value="true">
+                <button type="submit" class="text-indigo-500 underline hover:text-indigo-700">Ubah Pencarian</button>
+            </form>
         </div>
         <!-- Continue Button -->
         <div>

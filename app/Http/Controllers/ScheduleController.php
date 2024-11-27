@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SearchScheduleRequest;
-use App\Models\Location;
-use App\Models\Schedule;
 use App\Services\ScheduleService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -22,25 +20,30 @@ class ScheduleController extends Controller
 
     public function list(Request $request)
     {
-        $cache_schedules = Cache::get('schedules_' . session()->getId(), []);
-        $carbon = $this->carbon;
-
-        if (empty($cache_schedules)) {
-            return redirect('/')->with('alert', 'Session expired, please search again');
+        try {
+            $cache_schedules = $this->scheduleService->getCachedSchedules(session()->getId());
+        } catch (\Exception $e) {
+            return redirect('/')->with('alert', $e->getMessage());
         }
 
+        $carbon = $this->carbon;
         $date = $carbon::parse($cache_schedules['date']);
-        $dayOfWeek = $date->format('l');
-        $schedules = Schedule::where('origin_id', $cache_schedules['origin'])
-            ->where('destination_id', $cache_schedules['destination'])
-            ->whereJsonContains('active_days', $dayOfWeek)
-            ->get();
 
-        $location = Location::select();
-        $origin = Location::find($cache_schedules['origin']);
-        $destination = Location::find($cache_schedules['destination']);
+        $intervalTimeToBooking = $this->scheduleService->calculateIntervalTimeToBooking($carbon);
+        $dayOfWeek = $this->scheduleService->getDayOfWeek($cache_schedules['date']);
+        $schedules = $this->scheduleService->fetchSchedules(
+            $cache_schedules,
+            $intervalTimeToBooking,
+            $dayOfWeek,
+            $cache_schedules['date']
+        );
+        $locations = $this->scheduleService->getLocationFromSchedule($cache_schedules);
 
-        return view('schedule.list', compact('date', 'schedules', 'carbon', 'origin', 'destination'));
+        $origin = $locations['origin'];
+        $destination = $locations['destination'];
+        $passengers = $cache_schedules['passengers'];
+
+        return view('schedule.list', compact('date', 'schedules', 'carbon', 'origin', 'destination', 'passengers'));
     }
 
     public function search(SearchScheduleRequest $request)
@@ -51,7 +54,7 @@ class ScheduleController extends Controller
             'passengers',
             'date',
         ]);
-        
+
         Cache::put('schedules_' . session()->getId(), $cacheData, now()->addMinutes(30));
 
         return redirect()->route('schedule.list');
@@ -66,7 +69,7 @@ class ScheduleController extends Controller
         }
 
         Cache::put('booking_tickets_' . session()->getId(), $scheduleId, now()->addMinutes(30));
-        
+
         return response()->json($scheduleId);
     }
 }
