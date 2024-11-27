@@ -11,7 +11,11 @@
             <div class="flex-grow">
                 <label for="origin" class="block text-sm font-medium text-gray-700">Keberangkatan</label>
                 <select data-search="true" id="origin" name="origin" class="bg-indigo-50 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-500 w-full select2">
-                    <option value="">Pilih lokasi</option>
+                    @if($changeSearch === "true" && $origin)
+                        <option value="{{ $origin }}" selected>{{ $originName ?? 'Lokasi Asal' }}</option>
+                    @else
+                        <option value="" disabled selected>Pilih lokasi</option>
+                    @endif
                 </select>
             </div>
         </div>
@@ -24,8 +28,12 @@
             </svg>
             <div class="flex-grow">
                 <label for="destination" class="block text-sm font-medium text-gray-700">Tujuan</label>
-                <select data-search="true" id="destination" name="destination" class="bg-indigo-50 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-500 w-full select2" disabled>
-                    <option value="">Pilih lokasi</option>
+                <select data-search="true" id="destination" name="destination" class="bg-indigo-50 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-500 w-full select2" {{ !$origin ? 'disabled' : '' }}>
+                    @if($changeSearch === "true" && $destination)
+                        <option value="{{ $destination }}" selected>{{ $destinationName ?? 'Lokasi Tujuan' }}</option>
+                    @else
+                        <option value="" disabled selected>Pilih tujuan</option>
+                    @endif
                 </select>
             </div>
         </div>
@@ -37,7 +45,7 @@
             </svg>
             <div class="flex-grow">
                 <label for="origin" class="block text-sm font-medium text-gray-700">Jumlah Penumpang</label>
-                <input data-search="true" type="number" id="passengers" name="passengers" placeholder="1" value="1" class="bg-indigo-50 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-500 w-full">
+                <input data-search="true" type="number" id="passengers" name="passengers" placeholder="1" value="1" class="bg-indigo-50 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-500 w-full" value="{{ $passengers }}">
             </div>
         </div>
     
@@ -48,7 +56,7 @@
             </svg>
             <div class="flex-grow">
                 <label for="origin" class="block text-sm font-medium text-gray-700">Jadwal</label>
-                <input data-search="true" type="date" id="date" name="date" class="bg-indigo-50 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-500 w-full" min="{{ date('Y-m-d') }}">
+                <input data-search="true" type="date" id="date" name="date" class="bg-indigo-50 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-500 w-full" min="{{ date('Y-m-d') }}" value="{{ $date }}">
             </div>
         </div>
     </div>
@@ -64,6 +72,8 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
+    let changeSearch = '{{ $changeSearch }}';
+
     $('#origin').select2({
         placeholder: 'Pilih lokasi',
         width: '100%',
@@ -191,6 +201,12 @@ $(document).ready(function() {
             return false;
         }
     });
+
+    if (changeSearch === "true") {
+        // Set default values if changeSearch is false
+        $('#origin').val('{{ $origin }}').trigger('change');
+        $('#destination').val('{{ $destination }}').trigger('change');
+    }
 });
 </script>
 @endpush
