@@ -81,7 +81,7 @@
 
 <form id="scheduleForm" method="POST" action="{{ route('schedule.select-ticket') }}">
     @csrf
-    <input type="hidden" name="schedule_id" id="scheduleIdInput"> <!-- Kirim hanya satu schedule_id -->
+    <input type="hidden" name="schedule_id" id="scheduleIdInput">
 </form>
 
 @include('components.alert')
@@ -127,40 +127,20 @@
         const isLoggedIn = checkLoginStatus();
         if (!isLoggedIn) {
             showToast('warning', 'Silakan login terlebih dahulu untuk melanjutkan.', 15000);
-            window.location.href = '/auth/login'; // Redirect ke halaman login
+            window.location.href = '/auth/login?d=' + btoa(JSON.stringify({ 
+                w: ['redirect', 'callFunction'],
+                d: {
+                    redirect : '/booking/detail',
+                    callFunctionName: 'selectTicket',
+                    callFunctionParameters : [
+                        selectedSchedule
+                    ],
+                }
+            }));
             return;
         }
 
-        // Menambahkan token ke header Authorization menggunakan axios
-        try {
-            const token = localStorage.getItem('jwt_token');
-            const result = await axios.post('/schedule/select-ticket', {
-                schedule_id: selectedSchedule
-            }, {
-                headers: {
-                    'Authorization': `Bearer ${token}` // Menambahkan token ke header
-                }
-            });
-
-            // Jika request berhasil, Anda bisa menambahkan logika tambahan di sini, misalnya redirect atau update UI
-            // Contoh: window.location.href = '/next-page';
-            window.location.href = '/booking/detail';
-        } catch (error) {
-            // Tangani error dengan menampilkan toast
-            showToast('error', 'Terjadi kesalahan saat memproses checkout.', 5000);
-
-            // Log error ke console untuk debugging
-            console.error('Error details:', error);
-
-            // Jika error berasal dari response error (misalnya 401 atau 500)
-            if (error.response) {
-                console.error('Response error:', error.response.data);
-            }
-            // Jika error berasal dari jaringan (misalnya koneksi internet terputus)
-            else if (error.request) {
-                console.error('Request error:', error.request);
-            }
-        }
+        await selectTicket(selectedSchedule);
     });
 </script>
 @endpush

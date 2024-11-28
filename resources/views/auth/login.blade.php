@@ -30,7 +30,7 @@
             Login
         </button>
         <p class="text-center text-sm mt-4">
-            Belum punya akun? <a href="{{ route('auth.register') }}" class="text-indigo-500 hover:underline">Daftar</a>
+            Belum punya akun? <a href="{{ route('auth.register', ['d' => request()->query('d')]) }}" class="text-indigo-500 hover:underline">Daftar</a>
         </p>
     </form>
 </div>
@@ -45,6 +45,19 @@
     const passwordField = document.querySelector('#password');
     const showIcon = document.querySelector('#showIcon');
     const hideIcon = document.querySelector('#hideIcon');
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const encodedParams = urlParams.get('d');
+    let params = null;
+
+    if (encodedParams) {
+        try {
+            const decodedParams = JSON.parse(atob(encodedParams));
+            params = decodedParams;
+        } catch (error) {
+            console.error('Invalid parameters:', error);
+        }
+    }
 
     togglePassword.addEventListener('click', () => {
         // Toggle the type of the password field
@@ -66,9 +79,20 @@
 
         if (res && res.data.token) {
             alert('Login berhasil!');
+            const redirectUrl = params?.w.includes('redirect') ? params.d.redirect : null;
 
-            // Redirect ke dashboard
-            window.location.href = '/';
+            if (redirectUrl) {
+                if (params.w.includes('callFunction')) {
+                    const callFunctionName = params.d.callFunctionName;
+                    const callFunctionParams = params.d.callFunctionParams;
+                    
+                    await callFunction(callFunctionName, callFunctionParams);
+                }
+                
+            } else {
+                // Redirect ke dashboard
+                window.location.href = '/';
+            }
         } else {
             alert('Login gagal. Silakan periksa email atau password Anda.');
         }

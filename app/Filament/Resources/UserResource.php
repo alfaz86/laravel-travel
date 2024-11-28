@@ -22,7 +22,7 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
-    protected static array|string $routeMiddleware = ['is.dev'];
+    protected static array|string $routeMiddleware = ['role:dev'];
 
     public static function form(Form $form): Form
     {
