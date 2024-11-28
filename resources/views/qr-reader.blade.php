@@ -22,7 +22,33 @@
     <button id="startScan" class="px-4 py-2 bg-indigo-500 text-white rounded-md mt-4">Start Scan</button>
     <button id="stopScan" class="px-4 py-2 bg-red-500 text-white rounded-md mt-4 ml-2" disabled>Stop Scan</button>
 </div>
+
+@include('components.alert')
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        const isLoggedIn = checkLoginStatus();
+        if (!isLoggedIn) {
+            showToast('warning', 'Silakan login terlebih dahulu untuk melanjutkan.', 15000);
+            window.location.href = '/auth/login?d=' + btoa(JSON.stringify({ 
+                w: ['redirect'],
+                d: {
+                    redirect : '/qr-reader',
+                }
+            }));
+        } else {
+            const authUser = getAuthUser();
+            
+            if (authUser.role === 'user') {
+                showToast('warning', 'Anda tidak memiliki akses ke halaman ini.', 15000);
+                window.location.href = '/';
+            }
+        }
+    });
+</script>
+@endpush
 
 @push('scripts')
 <script src="{{ asset('/js/jsQR.js') }}"></script>

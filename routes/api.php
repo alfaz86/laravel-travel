@@ -63,5 +63,5 @@ Route::group([
 ], function () {
     Route::get('ticket-status/{ticketNumber}', 'streamStatus')
         ->name('ticket.status')
-        ->withoutMiddleware('jwt.verify');
+        ->withoutMiddleware(['jwt.verify', 'role:dev,admin']);
 });
