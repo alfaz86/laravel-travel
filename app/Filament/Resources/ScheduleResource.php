@@ -111,7 +111,7 @@ class ScheduleResource extends Resource
                     ->numeric()
                     ->required(),
 
-                Section::make('Hari Beroperasi')
+                Section::make('Operasional')
                     ->schema([
                         CheckboxList::make('active_days')
                             ->label('')
@@ -148,7 +148,7 @@ class ScheduleResource extends Resource
                 TextColumn::make('destination.name')
                     ->label('Tujuan'),
                 ViewColumn::make('active_days')
-                    ->label('Beroperasi')
+                    ->label('Operasional')
                     ->view('filament.tables.columns.active_days_badge')
                 
             ])

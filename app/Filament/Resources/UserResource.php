@@ -24,6 +24,12 @@ class UserResource extends Resource
 
     protected static array|string $routeMiddleware = ['role:dev'];
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        $user = auth()->user();
+        return $user && $user->role === 'dev';
+    }
+
     public static function form(Form $form): Form
     {
         return $form

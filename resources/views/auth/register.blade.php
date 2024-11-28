@@ -144,7 +144,7 @@
                     
                     await callFunction(callFunctionName, callFunctionParams);
                 }
-                
+                window.location.href = redirectUrl;
             } else {
                 // Redirect ke dashboard
                 window.location.href = '/';
