@@ -85,6 +85,19 @@
     const showConfirmIcon = document.querySelector('#showConfirmIcon');
     const hideConfirmIcon = document.querySelector('#hideConfirmIcon');
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const encodedParams = urlParams.get('d');
+    let params = null;
+
+    if (encodedParams) {
+        try {
+            const decodedParams = JSON.parse(atob(encodedParams));
+            params = decodedParams;
+        } catch (error) {
+            console.error('Invalid parameters:', error);
+        }
+    }
+
     // Toggle for password
     togglePassword.addEventListener('click', () => {
         const type = passwordField.type === 'password' ? 'text' : 'password';
@@ -122,9 +135,20 @@
 
         if (res && res.data.token) {
             alert('Registrasi berhasil!');
-            
-            // Redirect ke halaman lain jika diperlukan
-            window.location.href = '/';
+            const redirectUrl = params?.w.includes('redirect') ? params.d.redirect : null;
+
+            if (redirectUrl) {
+                if (params.w.includes('callFunction')) {
+                    const callFunctionName = params.d.callFunctionName;
+                    const callFunctionParams = params.d.callFunctionParams;
+                    
+                    await callFunction(callFunctionName, callFunctionParams);
+                }
+                
+            } else {
+                // Redirect ke dashboard
+                window.location.href = '/';
+            }
         } else if (res && res.data) {
             const errors = res.data;
             console.log(errors);
