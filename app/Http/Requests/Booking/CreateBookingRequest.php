@@ -31,6 +31,7 @@ class CreateBookingRequest extends FormRequest
     {
         return [
             'schedule_id' => ['required', 'exists:schedules,id'],
+            'booking_date' => ['required', 'date'],
             'quantity' => ['required', 'integer', 'min:1'],
             'total_price' => ['required', 'integer'],
             'passenger_name' => ['required', 'string'],

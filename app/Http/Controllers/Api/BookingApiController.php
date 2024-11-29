@@ -34,6 +34,7 @@ class BookingApiController extends ApiController
                 'schedule_id' => $validatedData['schedule_id'],
                 'user_id' => $validatedData['user_id'],
                 'booking_number' => $bookingNumber,
+                'booking_date' => $validatedData['booking_date'],
                 'quantity' => $validatedData['quantity'],
                 'total_price' => $validatedData['total_price'],
                 'passenger_name' => $validatedData['passenger_name'],

@@ -40,9 +40,9 @@ class PaymentService
                 'phone' => $booking->user->phone,
             ],
             'expiry' => [
-                'start_time' => now()->format('Y-m-d H:i:s'),
+                'start_time' => now()->format('Y-m-d H:i:s P'),
                 'unit' => 'minute',
-                'value' => 15,
+                'duration' => 15,
             ]
         ];
 
