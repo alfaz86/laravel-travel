@@ -16,14 +16,14 @@ class HomeController extends Controller
         $origin = null;
         $destination = null;
         $date = null;
-        $passengers = null;
+        $passengers = 1;
         
         if ($changeSearch === "true") {
             $cachedSchedules = Cache::get($cacheKey, []);
             $origin = $cachedSchedules['origin'] ?? null;
             $destination = $cachedSchedules['destination'] ?? null;
             $date = $cachedSchedules['date'] ?? null;
-            $passengers = $cachedSchedules['passengers'] ?? 1;
+            $passengers = $cachedSchedules['passengers'];
         }
 
         $originName = $origin ? Location::find($origin)->name ?? '-' : null;

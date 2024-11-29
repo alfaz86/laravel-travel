@@ -70,6 +70,13 @@
                         <span class="location">{{ $schedule->destination['name'] }}</span>
                     </div>
                 </div>
+                <div class="text-end mt-3">
+                    @if ($schedule['remaining_seats'] == 0)
+                        <span class="bg-red-600 text-white text-xs font-bold py-1 px-2 rounded-sm">Habis</span>
+                    @else
+                        <span class="bg-green-600 text-white text-xs font-bold py-1 px-2 rounded-sm">Tersedia {{ $schedule['remaining_seats'] }}</span>
+                    @endif
+                </div>
             </div>
         @endforeach
     </div>

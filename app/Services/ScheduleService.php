@@ -38,7 +38,8 @@ class ScheduleService
     {
         $today = Carbon::now('Asia/Jakarta')->format('Y-m-d');
 
-        return Schedule::where('origin_id', $cache_schedules['origin'])
+        return Schedule::available($date)
+            ->where('origin_id', $cache_schedules['origin'])
             ->where('destination_id', $cache_schedules['destination'])
             ->whereJsonContains('active_days', $dayOfWeek)
             ->when($today === $date, function ($query) use ($intervalTimeToBooking) {

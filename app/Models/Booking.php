@@ -13,11 +13,13 @@ class Booking extends Model
     const STATUS_PAID = 'paid';
     const STATUS_CANCEL = 'cancel';
     const STATUS_REFUND = 'refund';
+    const STATUS_EXPIRED = 'expired';
     const STATUS = [
         self::STATUS_PENDING,
         self::STATUS_PAID,
         self::STATUS_CANCEL,
         self::STATUS_REFUND,
+        self::STATUS_EXPIRED,
     ];
 
     const STATUS_OPTIONS = [
@@ -25,12 +27,14 @@ class Booking extends Model
         self::STATUS_PAID => 'Paid',
         self::STATUS_CANCEL => 'Cancel',
         self::STATUS_REFUND => 'Refund',
+        self::STATUS_EXPIRED => 'Expired',
     ];
 
     protected $fillable = [
         'schedule_id',
         'user_id',
         'booking_number',
+        'booking_date',
         'quantity',
         'total_price',
         'payment_status',

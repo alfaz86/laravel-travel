@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Schedule extends Model
 {
@@ -59,5 +60,27 @@ class Schedule extends Model
         }
 
         return implode(' ', $result);
+    }
+
+    public function scopeAvailable($query, $date)
+    {
+        return $query->select([
+            'schedules.*',
+            DB::raw('(buses.capacity - IFNULL(
+                (SELECT SUM(quantity) 
+                 FROM bookings 
+                 WHERE bookings.schedule_id = schedules.id 
+                   AND bookings.payment_status IN ("' . Booking::STATUS_PAID . '", "' . Booking::STATUS_PENDING . '") 
+                   AND DATE(bookings.booking_date) = "' . $date . '"
+                ), 0)) AS remaining_seats')
+        ])
+        ->join('buses', 'buses.id', '=', 'schedules.bus_id')
+        ->whereRaw('buses.capacity > IFNULL(
+            (buses.capacity - (SELECT SUM(quantity) 
+             FROM bookings 
+             WHERE bookings.schedule_id = schedules.id 
+               AND bookings.payment_status IN ("' . Booking::STATUS_PAID . '", "' . Booking::STATUS_PENDING . '") 
+               AND DATE(bookings.booking_date) = "' . $date . '"
+            )), 0)');
     }
 }

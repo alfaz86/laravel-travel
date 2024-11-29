@@ -39,6 +39,11 @@ class PaymentService
                 'email' => $booking->user->email,
                 'phone' => $booking->user->phone,
             ],
+            'expiry' => [
+                'start_time' => now()->format('Y-m-d H:i:s'),
+                'unit' => 'minute',
+                'value' => 15,
+            ]
         ];
 
         return Snap::getSnapToken($params);
