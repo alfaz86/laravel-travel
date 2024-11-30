@@ -127,6 +127,7 @@
                     quantity: searchSchedule.passengers,
                     schedule_id: schedule.id,
                     total_price,
+                    booking_date: searchSchedule.date
                 })
             });
     

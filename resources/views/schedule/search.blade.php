@@ -45,7 +45,7 @@
             </svg>
             <div class="flex-grow">
                 <label for="origin" class="block text-sm font-medium text-gray-700">Jumlah Penumpang</label>
-                <input data-search="true" type="number" id="passengers" name="passengers" placeholder="1" value="1" class="bg-indigo-50 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-500 w-full" value="{{ $passengers }}">
+                <input data-search="true" type="number" id="passengers" name="passengers" placeholder="1" class="bg-indigo-50 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-500 w-full" value="{{ $passengers }}">
             </div>
         </div>
     

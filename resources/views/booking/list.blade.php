@@ -75,11 +75,8 @@
             case 'paid':
                 badge = `<span class="bg-green-500 text-white text-xs font-bold py-1 px-2 rounded-full">PAID</span>`;
                 break;
-            case 'cancel':
-                badge = `<span class="bg-red-500 text-white text-xs font-bold py-1 px-2 rounded-full">CANCEL</span>`;
-                break;
             default:
-                badge = '';
+                badge = `<span class="bg-red-500 text-white text-xs font-bold py-1 px-2 rounded-full">${status.toUpperCase()}</span>`;
                 break;
         }
         return badge;

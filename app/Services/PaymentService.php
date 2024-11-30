@@ -17,7 +17,7 @@ class PaymentService
         $this->ticketService = $ticketService;
     }
 
-    public function createPayment(Booking $booking): string
+    public function createPayment(Booking $booking, $duration): string
     {
         $this->setMidtransConfig();
 
@@ -39,6 +39,11 @@ class PaymentService
                 'email' => $booking->user->email,
                 'phone' => $booking->user->phone,
             ],
+            'expiry' => [
+                'start_time' => now()->format('Y-m-d H:i:s P'),
+                'unit' => 'second',
+                'duration' => $duration,
+            ]
         ];
 
         return Snap::getSnapToken($params);

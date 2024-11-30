@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\Booking\CreateBookingRequest;
+use App\Jobs\ExpireStatusBookingJob;
 use App\Models\Booking;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -33,6 +34,7 @@ class BookingApiController extends ApiController
                 'schedule_id' => $validatedData['schedule_id'],
                 'user_id' => $validatedData['user_id'],
                 'booking_number' => $bookingNumber,
+                'booking_date' => $validatedData['booking_date'],
                 'quantity' => $validatedData['quantity'],
                 'total_price' => $validatedData['total_price'],
                 'passenger_name' => $validatedData['passenger_name'],
@@ -42,6 +44,8 @@ class BookingApiController extends ApiController
 
             // Commit transaction
             DB::commit();
+            // Call job to expire booking status
+            ExpireStatusBookingJob::dispatch($booking)->delay(now()->addMinutes(15));
 
             $data = [
                 ...$booking->toArray(),

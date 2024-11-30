@@ -4,7 +4,7 @@
     "scripts": {
         "dev": "vite",
         "build": "vite build",
-        "start": "dotenv -e .env concurrently \"npm run dev\" \"%PHP_PATH% artisan serve --host=%HOST% --port=%PORT%\""
+        "start": "dotenv -e .env concurrently \"npm run dev\" \"%PHP_PATH% artisan serve --host=%HOST% --port=%PORT%\" \"%PHP_PATH% artisan queue:work\""
     },
     "devDependencies": {
         "autoprefixer": "^10.4.20",

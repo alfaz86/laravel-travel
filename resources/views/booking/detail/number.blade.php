@@ -30,7 +30,7 @@
                         <td class="py-2 px-4 font-medium">Total Harga</td>
                         <td class="py-2 px-4">Rp {{ number_format($booking->total_price, 0, ',', '.') }}</td>
                     </tr>
-                    <tr>
+                    <tr class="border-b">
                         <td class="py-2 px-4 font-medium">Status Pembayaran</td>
                         <td class="py-2 px-4">
                             @if ($booking->payment_status === \App\Models\Booking::STATUS_PENDING)
@@ -48,6 +48,14 @@
                             @endif
                         </td>
                     </tr>
+                    @if ($booking->payment_status === \App\Models\Booking::STATUS_PENDING)
+                        <tr>
+                            <td class="py-2 px-4 font-medium">Sisa Waktu Pembayaran</td>
+                            <td class="py-2 px-4">
+                                <span id="countdown" ></span>
+                            </td>
+                        </tr>
+                    @endif
                 </tbody>
             </table>
         </div>
@@ -120,6 +128,35 @@
 @endsection
 
 @push('scripts')
+<script>
+    const countdown = document.getElementById('countdown');
+    const booking = @json($booking);
+    let remainingTime = new Date(booking.created_at).getTime();
+
+    if (countdown) {
+        const countDownTime = new Date(booking.created_at).getTime() + 15 * 60 * 1000;
+
+        const x = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = countDownTime - now;
+            remainingTime = distance;
+
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            countdown.innerHTML = `${minutes} Menit ${seconds} Detik`;
+            if (distance < 0) {
+                clearInterval(x);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 500);
+            }
+        });
+    }
+</script>
+@endpush
+
+@push('scripts')
 <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
 <script>
     const bookingButton = document.getElementById('booking');
@@ -132,8 +169,12 @@
         fetch(`/api/payment/pay/{{ $booking->booking_number }}`, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`
-            }
+                'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                remainingTime: Math.floor(remainingTime / 1000)
+            })
         })
         .then(response => response.json())
         .then(data => {
@@ -143,23 +184,25 @@
                 const snapToken = data.data.snapToken;
                 snap.pay(snapToken, {
                     onSuccess: function () {
-                        alert('Pembayaran berhasil!');
-                        window.location.href = '/api/payment/redirect';
+                        showToast('success', 'Pembayaran berhasil!', 3000);
+                        window.location.reload();
                     },
                     onPending: function () {
-                        alert('Pembayaran ditunda!');
-                        window.location.href = '/api/payment/redirect';
+                        showToast('warning', 'Pembayaran ditunda!', 3000);
+                        window.location.reload();
                     },
                     onError: function () {
-                        alert('Pembayaran gagal!');
+                        showToast('warning', 'Pembayaran gagal!', 3000);
+                        window.location.reload();
                     },
                     onClose: function () {
                         console.log('Customer closed the popup without finishing the payment');
                     }
                 });
             } else {
-                alert(data.message || 'Terjadi kesalahan saat memproses pembayaran.');
+                showToast('warning', data.message || 'Terjadi kesalahan saat memproses pembayaran.', 3000);
                 console.error(data.errors);
+                window.location.reload();
             }
         })
         .catch(error => {
