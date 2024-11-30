@@ -9,12 +9,8 @@
     <x-filament::badge color="success">
         {{ Str::upper($status) }}
     </x-filament::badge>
-@elseif($status === \App\Models\Booking::STATUS_CANCEL)
-    <x-filament::badge color="danger">
-        {{ Str::upper($status) }}
-    </x-filament::badge>
 @else
-    <x-filament::badge color="info">
+    <x-filament::badge color="danger">
         {{ Str::upper($status) }}
     </x-filament::badge>
 @endif

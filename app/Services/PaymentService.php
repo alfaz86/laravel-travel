@@ -17,7 +17,7 @@ class PaymentService
         $this->ticketService = $ticketService;
     }
 
-    public function createPayment(Booking $booking): string
+    public function createPayment(Booking $booking, $duration): string
     {
         $this->setMidtransConfig();
 
@@ -41,8 +41,8 @@ class PaymentService
             ],
             'expiry' => [
                 'start_time' => now()->format('Y-m-d H:i:s P'),
-                'unit' => 'minute',
-                'duration' => 15,
+                'unit' => 'second',
+                'duration' => $duration,
             ]
         ];
 

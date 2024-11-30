@@ -36,6 +36,9 @@ class BookingResource extends Resource
                 TextColumn::make('booking_number')
                     ->label('No Booking')
                     ->searchable('booking_number'),
+                TextColumn::make('booking_date')
+                    ->label('Tanggal Booking')
+                    ->searchable('booking_date'),
                 TextColumn::make('passenger_name')
                     ->label('Nama Penumpang')
                     ->searchable('passenger_name'),

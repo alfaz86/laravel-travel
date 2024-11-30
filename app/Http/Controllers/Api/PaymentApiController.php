@@ -15,7 +15,7 @@ class PaymentApiController extends ApiController
         $this->paymentService = $paymentService;
     }
 
-    public function pay($bookingNumber)
+    public function pay(Request $request, string $bookingNumber)
     {
         $booking = Booking::where('booking_number', $bookingNumber)->first();
 
@@ -35,7 +35,10 @@ class PaymentApiController extends ApiController
         }
         
         try {
-            $snapToken = $this->paymentService->createPayment($booking);
+            $snapToken = $this->paymentService->createPayment(
+                $booking,
+                $request['remainingTime']
+            );
             $booking->update(['snap_token' => $snapToken]);
 
             return $this->successResponse(
