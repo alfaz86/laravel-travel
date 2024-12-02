@@ -20,7 +20,8 @@
         </div>
         <!-- Continue Button -->
         <div>
-            <button id="checkoutButton" type="button" class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full">
+            <button id="checkoutButton" type="button" class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full flex items-center justify-center">
+                <span id="checkoutButtonSpinner" class="hidden spinner mr-2"></span>
                 Lanjutkan
             </button>
         </div>
@@ -126,28 +127,43 @@
     });
 
     $('#checkoutButton').on('click', async function() {
-        if (!selectedSchedule) {
-            showToast('warning', 'Pilih jadwal untuk melanjutkan.');
-            return;
-        }
+        setButtonLoading('checkoutButton', true);
 
-        const isLoggedIn = checkLoginStatus();
-        if (!isLoggedIn) {
-            showToast('warning', 'Silakan login terlebih dahulu untuk melanjutkan.', 15000);
-            window.location.href = '/auth/login?d=' + btoa(JSON.stringify({ 
-                w: ['redirect', 'callFunction'],
-                d: {
-                    redirect : '/booking/detail',
-                    callFunctionName: 'selectTicket',
-                    callFunctionParameters : [
-                        selectedSchedule
-                    ],
-                }
-            }));
-            return;
-        }
+        try {
+            if (!selectedSchedule) {
+                showToast('warning', 'Pilih jadwal untuk melanjutkan.');
+                return;
+            }
 
-        await selectTicket(selectedSchedule);
+            const isLoggedIn = checkLoginStatus();
+            if (!isLoggedIn) {
+                await showToastWithRedirect(
+                    'warning',
+                    'Silakan login terlebih dahulu untuk melanjutkan.',
+                    2000,
+                    () => {
+                        const redirectParams = {
+                            w: ['redirect', 'callFunction'],
+                            d: {
+                                redirect: '/booking/detail',
+                                callFunctionName: 'selectTicket',
+                                callFunctionParams: [selectedSchedule],
+                            },
+                        };
+                        const encodedParams = btoa(JSON.stringify(redirectParams));
+                        window.location.href = `/auth/login?d=${encodedParams}`;
+                    }
+                );
+                return;
+            }
+
+            await selectTicket(selectedSchedule);
+        } catch (error) {
+            console.error('Error:', error);
+            showToast('warning', 'Terjadi kesalahan dalam komunikasi dengan server.');
+        } finally {
+            setButtonLoading('checkoutButton', false);
+        }
     });
 </script>
 @endpush

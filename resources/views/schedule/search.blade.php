@@ -63,7 +63,8 @@
     
     <!-- Search Button -->
     <div class="flex justify-center mt-4">
-        <button type="submit" class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-3 px-10 rounded-lg focus:outline-none focus:shadow-outline w-full">
+        <button type="submit" id="searchButton" class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-3 px-10 rounded-lg focus:outline-none focus:shadow-outline w-full flex items-center justify-center">
+            <span id="searchButtonSpinner" class="hidden spinner mr-2"></span>
             Cari Tiket
         </button>
     </div>
@@ -200,6 +201,7 @@ $(document).ready(function() {
             showToast('warning', 'Silakan lengkapi semua data sebelum melanjutkan.');
             return false;
         }
+        setButtonLoading('searchButton', true);
     });
 
     if (changeSearch === "true") {

@@ -69,7 +69,8 @@
         </div>
     </div>
 
-    <button type="button" id="booking" class="w-full bg-indigo-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-700">
+    <button type="button" id="bookingButton" class="w-full bg-indigo-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-700 flex items-center justify-center">
+        <span id="bookingButtonSpinner" class="hidden spinner mr-2"></span>
         Pesan
     </button>
 </div>
@@ -81,7 +82,7 @@
 <script>
     $(function () {
         const authUser = getAuthUser();
-        const bookingButton = document.getElementById('booking');
+        const bookingButton = document.getElementById('bookingButton');
         const isUserCheckbox = document.getElementById('is_user');
         const nameInput = document.getElementById('name');
         const phoneInput = document.getElementById('phone');
@@ -105,38 +106,48 @@
         });
     
         bookingButton.addEventListener('click', async () => {
+            setButtonLoading('bookingButton', true);
+
             const token = localStorage.getItem('jwt_token');
             const isUser = isUserCheckbox.checked;
             const name = nameInput.value;
             const phone = phoneInput.value;
     
             if (!isUser && (!name || !phone)) {
-                return alert('Nama dan Nomor Telepon harus diisi');
+                showToast('warning', 'Nama dan Nomor Telepon harus diisi');
+                setButtonLoading('bookingButton', false);
+                return;
             }
     
-            const response = await fetch('{{ route('booking.create') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Authorization': 'Bearer ' + token
-                },
-                body: JSON.stringify({
-                    passenger_name: name,
-                    passenger_phone: phone,
-                    quantity: searchSchedule.passengers,
-                    schedule_id: schedule.id,
-                    total_price,
-                    booking_date: searchSchedule.date
-                })
-            });
+            try {
+                const response = await fetch('{{ route('booking.create') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({
+                        passenger_name: name,
+                        passenger_phone: phone,
+                        quantity: searchSchedule.passengers,
+                        schedule_id: schedule.id,
+                        total_price,
+                        booking_date: searchSchedule.date
+                    })
+                });
     
-            const data = await response.json();
+                const data = await response.json();
     
-            if (response.ok) {
+                if (!response.ok) {
+                    throw new Error(data.message);
+                }
+    
                 window.location.href = data.data.redirect;
-            } else {
-                alert(data.message);
+            } catch (error) {
+                showToast('warning', error.message);
+            } finally {
+                setButtonLoading('bookingButton', false);
             }
         });
     });

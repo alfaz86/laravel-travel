@@ -13,11 +13,15 @@
 
 @push('scripts')
 <script>
-    $(function () {
+    $(async function () {
         const isLoggedIn = checkLoginStatus();
         if (!isLoggedIn) {
-            showToast('warning', 'Silakan login terlebih dahulu untuk melanjutkan.', 15000);
-            window.location.href = '/auth/login'; // Redirect ke halaman login
+            await showToastWithRedirect(
+                'warning',
+                'Silakan login terlebih dahulu untuk melanjutkan.',
+                2000,
+                '/auth/login'
+            );
         } else {
             fetch('/api/booking/list', {
                 headers: {

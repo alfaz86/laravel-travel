@@ -28,16 +28,24 @@
 
 @push('scripts')
 <script>
-    $(document).ready(function() {
+    $(document).ready(async function() {
         const isLoggedIn = checkLoginStatus();
         if (!isLoggedIn) {
-            showToast('warning', 'Silakan login terlebih dahulu untuk melanjutkan.', 15000);
-            window.location.href = '/auth/login?d=' + btoa(JSON.stringify({ 
-                w: ['redirect'],
-                d: {
-                    redirect : '/qr-reader',
+            await showToastWithRedirect(
+                'warning',
+                'Silakan login terlebih dahulu untuk melanjutkan.',
+                1000,
+                () => {
+                    const redirectParams = {
+                        w: ['redirect'],
+                        d: {
+                            redirect : '/qr-reader',
+                        }
+                    };
+                    const encodedParams = btoa(JSON.stringify(redirectParams));
+                    window.location.href = `/auth/login?d=${encodedParams}`;
                 }
-            }));
+            );
         } else {
             const authUser = getAuthUser();
             

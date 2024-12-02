@@ -134,7 +134,7 @@
         const res = await authRegister(name, email, phone, password, password_confirmation);
 
         if (res && res.data.token) {
-            alert('Registrasi berhasil!');
+            showToast('success', 'Registrasi berhasil!', 3000);
             const redirectUrl = params?.w.includes('redirect') ? params.d.redirect : null;
 
             if (redirectUrl) {
@@ -143,8 +143,9 @@
                     const callFunctionParams = params.d.callFunctionParams;
                     
                     await callFunction(callFunctionName, callFunctionParams);
+                } else {
+                    window.location.href = redirectUrl;
                 }
-                window.location.href = redirectUrl;
             } else {
                 // Redirect ke dashboard
                 window.location.href = '/';

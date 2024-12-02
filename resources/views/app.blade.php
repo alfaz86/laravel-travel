@@ -16,7 +16,7 @@
         @include('components.navbar')
 
         <!-- Toast Container -->
-        <div id="toast-container" class="fixed top-5 right-5 z-50">
+        <div id="toast-container" class="fixed top-5 z-50 w-full mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Toast akan dimasukkan di sini -->
         </div>
 
