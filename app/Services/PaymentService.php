@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Booking;
 use App\Traits\MidtransConfig;
 use Midtrans\Snap;
+use Midtrans\Transaction;
 
 class PaymentService
 {
@@ -85,4 +86,16 @@ class PaymentService
         $booking->save();
     }
 
+    public function cancelPayment(Booking $booking)
+    {
+        $this->setMidtransConfig();
+
+        if ($booking->snap_token) {
+            Transaction::cancel($booking->booking_number);
+        }
+
+        $booking->payment_status = Booking::STATUS_CANCEL;
+        $booking->snap_token = null;
+        $booking->save();
+    }
 }

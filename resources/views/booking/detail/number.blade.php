@@ -60,9 +60,15 @@
             </table>
         </div>
         @if ($booking->payment_status === \App\Models\Booking::STATUS_PENDING)
-            <div class="bg-gray-100 px-6 py-4">
-                <button type="button" id="booking" class="w-full bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-indigo-700 transition duration-300">
-                    Lanjutkan Pembayaran
+            <div class="bg-gray-100 px-6 py-4 flex justify-between sm:justify-start">
+                <!-- Tombol Batalkan Booking -->
+                <button type="button" id="cancelBookingButton" class="w-full sm:w-auto bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700 transition duration-300">
+                    Cancel
+                </button>
+                
+                <!-- Tombol Lanjutkan Pembayaran -->
+                <button type="button" id="bookingButton" class="w-full sm:w-auto bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-300 ml-4">
+                    Bayar
                 </button>
             </div>
         @endif
@@ -159,8 +165,49 @@
 @push('scripts')
 <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
 <script>
-    const bookingButton = document.getElementById('booking');
+    const bookingButton = document.getElementById('bookingButton');
+    const cancelBookingButton = document.getElementById('cancelBookingButton');
     const loadingOverlay = document.getElementById('loading-overlay');
+
+    cancelBookingButton?.addEventListener('click', function () {
+        if (document.getElementById('toast-container').children.length === 0) {
+            showToast('question', 'Apakah Anda yakin ingin membatalkan booking ini?', 10000);
+        }
+        
+        // cek jika toast muncul
+        $('#confirm').off('click').on('click', function() {
+            console.log('Booking dibatalkan');
+            hideToast()
+
+            // cancel payment
+            fetch(`/api/payment/cancel/{{ $booking->booking_number }}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(async (data) => {
+                if (data.status === 'success') {
+                    await showToastWithRedirect(
+                        'success', 
+                        'Booking berhasil dibatalkan!', 
+                        2000,
+                        () => {
+                            window.location.reload();
+                        }
+                    );
+                } else {
+                    showToast('warning', data.message || 'Terjadi kesalahan saat membatalkan pembayaran.', 3000);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('error', 'Terjadi kesalahan dalam komunikasi dengan server.', 3000);
+            });
+        });
+    });
 
     bookingButton?.addEventListener('click', function () {
         // Tampilkan loading overlay

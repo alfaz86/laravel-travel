@@ -26,7 +26,8 @@
                 </div>
             </div>
         </div>
-        <button type="submit" class="w-full bg-indigo-500 text-white py-2 px-4 rounded hover:bg-indigo-600 transition">
+        <button id="loginSubmitButton" type="submit" class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full flex items-center justify-center">
+            <span id="loginSubmitButtonSpinner" class="hidden spinner mr-2"></span>
             Login
         </button>
         <p class="text-center text-sm mt-4">
@@ -70,6 +71,7 @@
     });
 
     document.querySelector('#loginForm').addEventListener('submit', async (e) => {
+        setButtonLoading('loginSubmitButton', true);
         e.preventDefault();
 
         const email = document.querySelector('#email').value;
@@ -77,24 +79,31 @@
 
         const res = await authLogin(email, password);
 
-        if (res && res.data.token) {
-            alert('Login berhasil!');
-            const redirectUrl = params?.w.includes('redirect') ? params.d.redirect : null;
+        try {
+            if (res && res.data.token) {
+                showToast('success', 'Login berhasil!', 3000);
+                const redirectUrl = params?.w.includes('redirect') ? params.d.redirect : null;
 
-            if (redirectUrl) {
-                if (params.w.includes('callFunction')) {
-                    const callFunctionName = params.d.callFunctionName;
-                    const callFunctionParams = params.d.callFunctionParams;
-                    
-                    await callFunction(callFunctionName, callFunctionParams);
+                if (redirectUrl) {
+                    if (params.w.includes('callFunction')) {
+                        const callFunctionName = params.d.callFunctionName;
+                        const callFunctionParams = params.d.callFunctionParams;
+                        
+                        await callFunction(callFunctionName, callFunctionParams);
+                    } else {
+                        window.location.href = redirectUrl;
+                    }
+                } else {
+                    // Redirect ke dashboard
+                    window.location.href = '/';
                 }
-                window.location.href = redirectUrl;
             } else {
-                // Redirect ke dashboard
-                window.location.href = '/';
+                alert('Login gagal. Silakan periksa email atau password Anda.');
             }
-        } else {
-            alert('Login gagal. Silakan periksa email atau password Anda.');
+        } catch (error) {
+            console.error('Error:', error);
+        } finally {
+            setButtonLoading('loginSubmitButton', false);
         }
     });
 </script>

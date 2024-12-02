@@ -48,5 +48,19 @@ async function selectTicket(selectedSchedule) {
     }
 }
 
+function setButtonLoading(buttonId, isLoading = true) {
+    const button = document.getElementById(buttonId);
+    const spinner = document.getElementById(buttonId + 'Spinner');
+
+    if (isLoading) {
+        button.disabled = true; // Menonaktifkan tombol
+        spinner.classList.remove('hidden'); // Menampilkan spinner
+    } else {
+        button.disabled = false; // Mengaktifkan kembali tombol
+        spinner.classList.add('hidden'); // Menyembunyikan spinner
+    }
+}
+
 window.callFunction = callFunction;
 window.selectTicket = selectTicket;
+window.setButtonLoading = setButtonLoading;

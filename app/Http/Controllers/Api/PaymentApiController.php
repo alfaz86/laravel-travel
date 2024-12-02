@@ -77,4 +77,32 @@ class PaymentApiController extends ApiController
         $host = env('APP_URL');
         return redirect($host . '/booking/list');
     }
+
+    public function cancel(Request $request, string $bookingNumber)
+    {
+        $booking = Booking::where('booking_number', $bookingNumber)->first();
+
+        if (!$booking) {
+            return $this->notFoundResponse('Booking tidak ditemukan');
+        }
+
+        if ($booking->payment_status === Booking::STATUS_PAID) {
+            return $this->errorResponse('Transaksi sudah dibayar', 400);
+        }
+
+        try {
+            $this->paymentService->cancelPayment($booking);
+
+            return $this->successResponse(
+                null,
+                'Pembayaran berhasil dibatalkan'
+            );
+        } catch (\Exception $e) {
+            return $this->errorResponse(
+                'Gagal membatalkan pembayaran',
+                500,
+                ['error' => $e->getMessage()]
+            );
+        }
+    }
 }
