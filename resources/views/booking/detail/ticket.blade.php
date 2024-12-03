@@ -60,7 +60,36 @@
 @endsection
 
 @push('scripts')
-@if ($checkStreamSetting == 'on')
+@if (env('APP_PUSHER_SETTING', false))
+<script>
+    $(document).ready(function() {
+        const pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+            cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
+            encrypted: true
+        });
+    
+        const channel = pusher.subscribe('status-ticket-updates');
+        channel.bind('StatusTicketUpdated', function (data) {
+            console.log('Received data:', data);
+
+            const statusElement = document.getElementById('ticketStatus');
+            const status = data.status;
+            if (status === 'used') {
+                statusElement.textContent = 'USED';
+                statusElement.className = 'bg-green-500 text-white text-xs font-bold py-1 px-2 rounded-full';
+                showToast('success', 'Tiket berhasil digunakan.', 5000);
+            } else if (status === 'not_used') {
+                statusElement.textContent = 'NOT USED';
+                statusElement.className = 'bg-yellow-500 text-white text-xs font-bold py-1 px-2 rounded-full';
+            } 
+        });
+    });
+</script>
+@endif
+@endpush
+
+@push('scripts')
+@if (env('APP_STREAM_SETTING', false))
 <script>
     // Menggunakan EventSource untuk mendengarkan perubahan status tiket
     const ticketNumber = "{{ $ticket->ticket_number }}";  // Nomor tiket dari backend Laravel
@@ -80,7 +109,7 @@
             statusElement.textContent = 'USED';
             statusElement.className = 'bg-green-500 text-white text-xs font-bold py-1 px-2 rounded-full';
             if (previousStatus === 'not_used') {
-                showToast('success', 'Tiket berhasil digunakan.', 5000);
+                showToast('success', 'Tiket berhasil digunakan.', 10000);
                 previousStatus = status;
             }
         } else if (status === 'not_used') {

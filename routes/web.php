@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Route::view
-Route::view('/qr-reader', 'qr-reader');
+Route::view('/qr-reader', 'qr-reader')->name('qr.reader.page');
 Route::view('/scan', 'scan'); // Only for development
 
 Route::prefix('auth')->group(function () {
