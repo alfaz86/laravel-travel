@@ -60,10 +60,12 @@
                 <div class="form-group">
                     <label for="name" class="block text-sm font-medium text-gray-700">Nama Penumpang</label>
                     <input type="text" name="name" id="name" class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+                    <p id="passenger_name_error" class="text-sm text-red-500 mt-1 hidden"></p>
                 </div>
                 <div class="form-group">
                     <label for="phone" class="block text-sm font-medium text-gray-700">Nomor Telepon</label>
                     <input type="text" name="phone" id="phone" class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+                    <p id="passenger_phone_error" class="text-sm text-red-500 mt-1 hidden"></p>
                 </div>
             </form>
         </div>
@@ -108,16 +110,14 @@
         bookingButton.addEventListener('click', async () => {
             setButtonLoading('bookingButton', true);
 
+            // Reset all error messages
+            const errorFields = ['passenger_name', 'passenger_phone'];
+            resetErrorsFields(errorFields);
+
             const token = localStorage.getItem('jwt_token');
             const isUser = isUserCheckbox.checked;
             const name = nameInput.value;
             const phone = phoneInput.value;
-    
-            if (!isUser && (!name || !phone)) {
-                showToast('warning', 'Nama dan Nomor Telepon harus diisi');
-                setButtonLoading('bookingButton', false);
-                return;
-            }
     
             try {
                 const response = await fetch('{{ route('booking.create') }}', {
@@ -140,6 +140,12 @@
                 const data = await response.json();
     
                 if (!response.ok) {
+                    if (response.status === 422) {
+                        const errors = data.data;
+                        setErrorsFields(errors);
+
+                        throw new Error("Silahkan periksa kembali data yang diinput");
+                    }
                     throw new Error(data.message);
                 }
     

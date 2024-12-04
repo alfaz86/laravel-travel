@@ -1,11 +1,9 @@
 <?php
 
-use App\Http\Controllers\Api\AdminApiController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BookingApiController;
 use App\Http\Controllers\Api\PaymentApiController;
 use App\Http\Controllers\Api\QrApiController;
-use App\Http\Controllers\Api\TicketApiController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->controller(AuthController::class)->group(function () {
@@ -37,7 +35,3 @@ Route::prefix('payment')->controller(PaymentApiController::class)->group(functio
 Route::post('qr-reader', [QrApiController::class, 'qrReader'])
     ->middleware('jwt.verify')
     ->name('qr.reader');
-
-Route::get('ticket-status/{ticketNumber}', [TicketApiController::class, 'streamStatus'])
-    ->name('ticket.status')
-    ->withoutMiddleware(['jwt.verify', 'role:dev,admin']);

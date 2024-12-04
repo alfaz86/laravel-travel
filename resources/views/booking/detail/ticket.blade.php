@@ -86,45 +86,7 @@
     });
 </script>
 @endif
-@endpush
 
-@push('scripts')
-@if (env('APP_STREAM_SETTING', false))
-<script>
-    // Menggunakan EventSource untuk mendengarkan perubahan status tiket
-    const ticketNumber = "{{ $ticket->ticket_number }}";  // Nomor tiket dari backend Laravel
-    const eventSource = new EventSource(`/api/ticket-status/${ticketNumber}`);
-
-    // Variable
-    let previousStatus = null;
-
-    // Mendengarkan event dari server
-    eventSource.onmessage = function(event) {
-        const data = JSON.parse(event.data);  // Mengurai data dari server
-        const status = data.status;  // Status tiket yang diterima
-
-        // Update status tiket di halaman
-        const statusElement = document.getElementById('ticketStatus');
-        if (status === 'used') {
-            statusElement.textContent = 'USED';
-            statusElement.className = 'bg-green-500 text-white text-xs font-bold py-1 px-2 rounded-full';
-            if (previousStatus === 'not_used') {
-                showToast('success', 'Tiket berhasil digunakan.', 10000);
-                previousStatus = status;
-            }
-        } else if (status === 'not_used') {
-            statusElement.textContent = 'NOT USED';
-            statusElement.className = 'bg-yellow-500 text-white text-xs font-bold py-1 px-2 rounded-full';
-            previousStatus = status;
-        } 
-    };
-
-    // Jika ada error pada SSE
-    eventSource.onerror = function(event) {
-        console.error("Error in SSE connection:", event);
-    };
-</script>
-@endif
 <script>
     document.getElementById('copyLink').addEventListener('click', function () {
         const ticketLink = "{{ url('/booking/detail/ticket/' . $ticket->ticket_number) }}";

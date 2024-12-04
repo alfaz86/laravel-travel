@@ -60,7 +60,9 @@
             <p id="password_confirmation_error" class="text-sm text-red-500 mt-1 hidden"></p>
         </div>
         <button type="submit"
-            class="w-full bg-indigo-500 text-white py-2 px-4 rounded hover:bg-indigo-600 transition">
+            id="registerButton"
+            class="w-full bg-indigo-500 text-white py-2 px-4 rounded hover:bg-indigo-600 transition flex items-center justify-center">
+            <span id="registerButtonSpinner" class="hidden spinner mr-2"></span>
             Daftar
         </button>
         <p class="text-center text-sm mt-4">
@@ -116,13 +118,11 @@
 
     document.querySelector('#registerForm').addEventListener('submit', async (e) => {
         e.preventDefault();
+        setButtonLoading('registerButton', true);
 
         // Reset all error messages
         const errorFields = ['name', 'email', 'phone', 'password', 'password_confirmation'];
-        errorFields.forEach(field => {
-            document.querySelector(`#${field}_error`).classList.add('hidden');
-            document.querySelector(`#${field}_error`).textContent = '';
-        });
+        resetErrorsFields(errorFields)
 
         // Ambil data dari form
         const name = document.querySelector('#name').value;
@@ -131,39 +131,36 @@
         const password = document.querySelector('#password').value;
         const password_confirmation = document.querySelector('#password_confirmation').value;
 
-        const res = await authRegister(name, email, phone, password, password_confirmation);
+        try {
+            const res = await authRegister(name, email, phone, password, password_confirmation);
 
-        if (res && res.data.token) {
-            showToast('success', 'Registrasi berhasil!', 3000);
-            const redirectUrl = params?.w.includes('redirect') ? params.d.redirect : null;
+            if (res && res.data.token) {
+                showToast('success', 'Registrasi berhasil!', 3000);
+                const redirectUrl = params?.w.includes('redirect') ? params.d.redirect : null;
 
-            if (redirectUrl) {
-                if (params.w.includes('callFunction')) {
-                    const callFunctionName = params.d.callFunctionName;
-                    const callFunctionParams = params.d.callFunctionParams;
-                    
-                    await callFunction(callFunctionName, callFunctionParams);
+                if (redirectUrl) {
+                    if (params.w.includes('callFunction')) {
+                        const callFunctionName = params.d.callFunctionName;
+                        const callFunctionParams = params.d.callFunctionParams;
+                        
+                        await callFunction(callFunctionName, callFunctionParams);
+                    } else {
+                        window.location.href = redirectUrl;
+                    }
                 } else {
-                    window.location.href = redirectUrl;
+                    // Redirect ke dashboard
+                    window.location.href = '/';
                 }
+            } else if (res && res.data) {
+                const errors = res.data;
+                setErrorsFields(errors);
             } else {
-                // Redirect ke dashboard
-                window.location.href = '/';
+                throw new Error(data.message);
             }
-        } else if (res && res.data) {
-            const errors = res.data;
-            console.log(errors);
-            
-            // Tampilkan pesan error di form
-            Object.keys(errors).forEach(field => {
-                const errorElement = document.querySelector(`#${field}_error`);
-                if (errorElement) {
-                    errorElement.textContent = errors[field].join(', ');
-                    errorElement.classList.remove('hidden');
-                }
-            });
-        } else {
-            alert('Registrasi gagal. Terjadi kesalahan server.');
+        } catch (error) {
+            showToast('warning', error.message, 3000);
+        } finally {
+            setButtonLoading('registerButton', false);
         }
     });
 </script>
