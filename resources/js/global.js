@@ -61,6 +61,26 @@ function setButtonLoading(buttonId, isLoading = true) {
     }
 }
 
+function resetErrorsFields(fields) {
+    const errorFields = [...fields];
+    errorFields.forEach(field => {
+        document.querySelector(`#${field}_error`).classList.add('hidden');
+        document.querySelector(`#${field}_error`).textContent = '';
+    });
+}
+
+function setErrorsFields(errors) {
+    Object.keys(errors).forEach(field => {
+        const errorElement = document.querySelector(`#${field}_error`);
+        if (errorElement) {
+            errorElement.textContent = errors[field].join(', ');
+            errorElement.classList.remove('hidden');
+        }
+    });
+}
+
 window.callFunction = callFunction;
 window.selectTicket = selectTicket;
 window.setButtonLoading = setButtonLoading;
+window.resetErrorsFields = resetErrorsFields;
+window.setErrorsFields = setErrorsFields;

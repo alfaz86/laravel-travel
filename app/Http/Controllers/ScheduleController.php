@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\SearchScheduleRequest;
+use App\Http\Requests\Schedule\SearchScheduleRequest;
 use App\Services\ScheduleService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -48,14 +48,7 @@ class ScheduleController extends Controller
 
     public function search(SearchScheduleRequest $request)
     {
-        $cacheData = $request->only([
-            'origin',
-            'destination',
-            'passengers',
-            'date',
-        ]);
-
-        Cache::put('schedules_' . session()->getId(), $cacheData, now()->addMinutes(30));
+        Cache::put('schedules_' . session()->getId(), $request->validated(), now()->addMinutes(30));
 
         return redirect()->route('schedule.list');
     }

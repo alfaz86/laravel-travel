@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Schedule;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ListScheduleRequest extends FormRequest
+class SearchScheduleRequest extends FormRequest
 {
     public function rules(): array
     {

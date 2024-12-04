@@ -11,7 +11,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @yield('styles')
     </head>
-    <body>
+    <body class="min-h-screen flex flex-col">
         <!-- Include Navbar -->
         @include('components.navbar')
 
@@ -21,8 +21,10 @@
         </div>
 
         <!-- Content Section -->
-        <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 my-5">
-            @yield('content')
+        <main class="my-5 flex-grow">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                @yield('content')
+            </div>
         </main>
 
         <!-- Include Footer -->

@@ -162,16 +162,16 @@
         .then(response => response.json())
         .then(data => {
             isRequestInProgress = false;  // Reset the flag after the request is completed
-            if (data.status == 'success') {
-                alert(`Ticket ${ticketNumber} successfully used.`);
+            if (data.status === 'success') {
+                showToast('success', data.message, 5000);
             } else {
-                alert(`Error: ${data.message}`);
+                showToast('warning', data.message, 5000);
             }
         })
         .catch(error => {
             isRequestInProgress = false;  // Reset the flag in case of error
             console.error('Error:', error);
-            alert("Failed to process QR code.");
+            showToast('warning', error.message, 5000);
         })
         .finally(() => {
             output.textContent = "";

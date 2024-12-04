@@ -50,8 +50,6 @@ class BookingController extends Controller
             return redirect('/')->with('alert', 'Tiket tidak ditemukan.');
         }
 
-        $checkStreamSetting = env('APP_STREAM_SETTING', 'off');
-
-        return view('booking.detail.ticket', compact('ticket', 'checkStreamSetting'));
+        return view('booking.detail.ticket', compact('ticket'));
     }
 }
