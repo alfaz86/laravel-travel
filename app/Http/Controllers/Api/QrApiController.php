@@ -31,7 +31,10 @@ class QrApiController extends ApiController
         ]);
 
         if (env('APP_PUSHER_SETTING', false)) {
-            event(new StatusTicketUpdated(Ticket::STATUS_USED));
+            event(new StatusTicketUpdated(
+                Ticket::STATUS_USED,
+                $request->ticket_number
+            ));
         }
 
         return $this->successResponse(

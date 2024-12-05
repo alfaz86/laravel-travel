@@ -26,7 +26,6 @@ class ExpireStatusBookingJob implements ShouldQueue
         if ($this->booking->payment_status === Booking::STATUS_PENDING && now() >= $expiredTime) {
             $this->booking->update([
                 'payment_status' => Booking::STATUS_EXPIRED,
-                'snap_token' => null,
             ]);
             \Log::info('Booking status expired', ['booking' => $this->booking->toArray()]);
         }
