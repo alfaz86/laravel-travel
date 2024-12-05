@@ -63,6 +63,7 @@
 @if (env('APP_PUSHER_SETTING', false))
 <script>
     $(document).ready(function() {
+        const currentTicketNumber = @json($ticket->ticket_number);
         const pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
             cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
             encrypted: true
@@ -70,7 +71,9 @@
     
         const channel = pusher.subscribe('status-ticket-updates');
         channel.bind('StatusTicketUpdated', function (data) {
-            console.log('Received data:', data);
+            if (data.ticketNumber !== currentTicketNumber) {
+                return;
+            }
 
             const statusElement = document.getElementById('ticketStatus');
             const status = data.status;

@@ -15,10 +15,12 @@ class StatusTicketUpdated implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $status;
+    public $ticketNumber;
 
-    public function __construct($status)
+    public function __construct($status, $ticketNumber)
     {
         $this->status = $status;
+        $this->ticketNumber = $ticketNumber;
     }
 
     public function broadcastOn()

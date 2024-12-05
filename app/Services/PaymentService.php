@@ -78,10 +78,6 @@ class PaymentService
             throw new \Exception('Booking tidak ditemukan.');
         }
 
-        if ($status === Booking::STATUS_PAID || $status === Booking::STATUS_CANCEL) {
-            $booking->snap_token = null;
-        }
-
         $booking->payment_status = $status;
         $booking->save();
     }
@@ -95,7 +91,6 @@ class PaymentService
         }
 
         $booking->payment_status = Booking::STATUS_CANCEL;
-        $booking->snap_token = null;
         $booking->save();
     }
 }
