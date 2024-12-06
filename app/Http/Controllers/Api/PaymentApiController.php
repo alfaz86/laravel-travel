@@ -72,12 +72,6 @@ class PaymentApiController extends ApiController
         }
     }
 
-    public function redirect(Request $request)
-    {
-        $host = env('APP_URL');
-        return redirect($host . '/booking/list');
-    }
-
     public function cancel(Request $request, string $bookingNumber)
     {
         $booking = Booking::where('booking_number', $bookingNumber)->first();

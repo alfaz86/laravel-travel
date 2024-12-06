@@ -40,7 +40,7 @@
                     const formattedPrice = parseFloat(booking.total_price).toLocaleString('id-ID');
 
                     bookingElement.innerHTML = `
-                        <div class="bg-white shadow-md rounded-lg p-6 mb-4">
+                        <div class="main-card bg-white shadow-md rounded-lg p-6 mb-4">
                             <div class="flex justify-between items-center">
                                 <div>
                                     <h4 class="font-bold text-lg">${booking.booking_number}</h4>
