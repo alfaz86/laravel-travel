@@ -29,3 +29,7 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+.card, .main-card, .main-alert {
+    border: 1px solid #e2e8f0;
+}

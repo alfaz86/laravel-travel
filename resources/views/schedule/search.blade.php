@@ -4,7 +4,7 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <!-- Input Origin Card -->
-        <div class="bg-indigo-50 shadow-lg shadow-indigo-300/50 rounded-lg p-4 flex items-center">
+        <div class="main-card bg-indigo-50 shadow-lg shadow-indigo-300/50 rounded-lg p-4 flex items-center">
             <svg class="w-8 h-8 text-gray-600 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
             </svg>
@@ -21,7 +21,7 @@
         </div>
     
         <!-- Input Destination Card -->
-        <div class="bg-indigo-50 shadow-lg shadow-indigo-300/50 rounded-lg p-4 flex items-center">
+        <div class="main-card bg-indigo-50 shadow-lg shadow-indigo-300/50 rounded-lg p-4 flex items-center">
             <svg class="w-8 h-8 text-gray-600 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
@@ -39,7 +39,7 @@
         </div>
     
         <!-- Input Passengers Card -->
-        <div class="bg-indigo-50 shadow-lg shadow-indigo-300/50 rounded-lg p-4 flex items-center">
+        <div class="main-card bg-indigo-50 shadow-lg shadow-indigo-300/50 rounded-lg p-4 flex items-center">
             <svg class="w-8 h-8 text-gray-600 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
             </svg>
@@ -50,7 +50,7 @@
         </div>
     
         <!-- Input Departure Time Card -->
-        <div class="bg-indigo-50 shadow-lg shadow-indigo-300/50 rounded-lg p-4 flex items-center">
+        <div class="main-card bg-indigo-50 shadow-lg shadow-indigo-300/50 rounded-lg p-4 flex items-center">
             <svg class="w-8 h-8 text-gray-600 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>

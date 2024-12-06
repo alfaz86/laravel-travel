@@ -16,7 +16,7 @@
     </div>
 
     <!-- Ticket Details -->
-    <div class="bg-white shadow-md rounded-lg px-6 py-4">
+    <div class="main-card bg-white shadow-md rounded-lg px-6 py-4">
         <!-- Status -->
         <div class="mb-4">
             <span class="block text-gray-600 font-bold">Status:</span>
