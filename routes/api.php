@@ -29,9 +29,7 @@ Route::prefix('payment')->controller(PaymentApiController::class)->group(functio
         Route::post('cancel/{bookingNumber}', 'cancel')->name('payment.cancel');
     });
     Route::post('callback', 'callback')->name('payment.callback')->withoutMiddleware('jwt.verify');
-    Route::get('redirect', function () {
-        return redirect()->route('booking.list.page');
-    })->name('payment.redirect')->withoutMiddleware('jwt.verify');
+    Route::get('redirect', 'redirect')->name('payment.redirect')->withoutMiddleware('jwt.verify');
 });
 
 Route::post('qr-reader', [QrApiController::class, 'qrReader'])

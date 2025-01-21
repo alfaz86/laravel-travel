@@ -99,4 +99,16 @@ class PaymentApiController extends ApiController
             );
         }
     }
+
+    public function redirect(Request $request)
+    {
+        $appEnv = env('APP_ENV');
+
+        if ($appEnv === 'local') {
+            $appUrl = env('APP_URL');
+            return redirect($appUrl . '/booking/list');
+        }
+
+        return redirect()->route('booking.list.page');
+    }
 }

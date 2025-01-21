@@ -68,10 +68,11 @@ class BookingApiController extends ApiController
      */
     private function generateBookingNumber(): string
     {
+        $appCode = env('APP_CODE');
         $randomString = Str::random(12);
         $timestamp = now()->timestamp;
 
-        return "BID-$randomString-$timestamp";
+        return "BID-$appCode.$randomString-$timestamp";
     }
 
     /**

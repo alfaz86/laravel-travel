@@ -5,9 +5,9 @@
             <div class="flex">
                 <div class="flex-shrink-0 flex items-center">
                     @if (request()->is('/'))
-                    <img class="h-8 w-auto" src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company">
+                    <img class="h-8 w-auto" src="/images/logo-main.png" alt="Your Company">
                     @else
-                    <img class="h-8 w-auto img-app" src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company">
+                    <img class="h-8 w-auto img-app" src="/images/logo-main.png" alt="Your Company">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6 text-gray-400 cursor-pointer nav-back" onclick="history.back()">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
                     </svg>
