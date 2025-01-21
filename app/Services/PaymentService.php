@@ -47,6 +47,12 @@ class PaymentService
             ]
         ];
 
+        if (env('APP_URL')) {
+            $params['dana'] = [
+                'callback_url' => env('APP_URL') . '/api/payment/redirect?order_id=' . $booking->booking_number,
+            ];
+        }
+
         return Snap::getSnapToken($params);
     }
 

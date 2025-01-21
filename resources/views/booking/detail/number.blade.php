@@ -6,7 +6,7 @@
 <div class="container mx-auto my-8">
     <h3 class="text-3xl font-bold mb-6 text-center text-gray-800 hidden sm:block">Detail Booking</h3>
     
-    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+    <div class="main-card bg-white shadow-md rounded-lg overflow-hidden">
         <div class="py-6 px-3">
             <table class="table-auto w-full text-left text-gray-700 border-collapse">
                 <tbody>
@@ -30,7 +30,11 @@
                         <td class="py-2 px-4 font-medium">Total Harga</td>
                         <td class="py-2 px-4">Rp {{ number_format($booking->total_price, 0, ',', '.') }}</td>
                     </tr>
-                    <tr class="border-b">
+                    <tr 
+                        @if ($booking->payment_status === \App\Models\Booking::STATUS_PENDING)
+                            class="border-b"
+                        @endif
+                    >
                         <td class="py-2 px-4 font-medium">Status Pembayaran</td>
                         <td class="py-2 px-4">
                             @if ($booking->payment_status === \App\Models\Booking::STATUS_PENDING)
@@ -79,7 +83,7 @@
             <h3 class="text-2xl font-bold mb-6 text-center text-gray-800">Daftar Tiket</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 @foreach ($booking->tickets as $ticket)
-                    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                    <div class="main-card bg-white shadow-md rounded-lg overflow-hidden">
                         <div class="py-6 px-3">
                             <table class="table-auto w-full text-left text-gray-700 border-collapse">
                                 <tbody>

@@ -4,7 +4,9 @@
     "scripts": {
         "dev": "vite",
         "build": "vite build",
-        "start": "dotenv -e .env concurrently \"npm run dev\" \"%PHP_PATH% artisan serve --host=%HOST% --port=%PORT%\" \"%PHP_PATH% artisan queue:work\""
+        "setup-network": "node setup-network.cjs",
+        "start-ngrok": "node start-ngrok.cjs",
+        "start": "npm run setup-network && dotenv -e .env concurrently \"%PHP_PATH% artisan serve --host=%HOST% --port=%PORT%\" \"npm run start-ngrok\" \"npm run dev\" \"%PHP_PATH% artisan queue:work\""
     },
     "devDependencies": {
         "autoprefixer": "^10.4.20",
@@ -18,6 +20,8 @@
     },
     "dependencies": {
         "flowbite": "^2.5.2",
-        "pusher-js": "^8.4.0-rc2"
+        "ngrok": "^5.0.0-beta.2",
+        "pusher-js": "^8.4.0-rc2",
+        "qrcode-terminal": "^0.12.0"
     }
 }

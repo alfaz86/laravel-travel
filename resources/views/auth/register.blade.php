@@ -5,7 +5,7 @@
 @section('content')
 <div class="container mx-auto my-8">
     <h2 class="text-2xl font-bold text-center mb-4 hidden sm:block">Register</h2>
-    <form id="registerForm" method="POST" class="max-w-md mx-auto p-4 bg-white shadow-md rounded">
+    <form id="registerForm" method="POST" class="main-card max-w-md mx-auto p-4 bg-white shadow-md rounded">
         @csrf
         <div class="mb-4">
             <label for="name" class="block text-sm font-medium text-gray-700">Nama</label>
