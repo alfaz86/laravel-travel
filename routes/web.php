@@ -1,5 +1,6 @@
 <?php
 
+use App\Filament\Resources\BusResource;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocationController;
@@ -33,3 +34,8 @@ Route::prefix('booking')->controller(BookingController::class)->group(function (
     Route::get('/detail/{bookingNumber}', 'detailNumber')->name('booking.detail.number');
     Route::get('/detail/ticket/{ticketNumber}', 'detailTicket')->name('booking.detail.ticket');
 });
+
+// Filament Admin Routes
+Route::prefix('admin/buses')->controller(BusResource::class)->group(function () {
+    Route::get('/export/{export}', 'export')->name('buses.export');
+})->middleware('auth:filament');

@@ -31,4 +31,22 @@ class HomeController extends Controller
 
         return view('index', compact('origin', 'destination', 'date', 'passengers', 'originName', 'destinationName', 'changeSearch'));
     }
+
+    public function checkNetwork(Request $request)
+    {
+        $clientIp = $request->ip(); // IP dari HP
+        $serverIp = getHostByName(getHostName()); // IP dari server lokal Laravel
+
+        // Ambil 3 segmen awal dari IP, misal 192.168.1
+        $clientSubnet = implode('.', array_slice(explode('.', $clientIp), 0, 3));
+        $serverSubnet = implode('.', array_slice(explode('.', $serverIp), 0, 3));
+
+        $sameNetwork = $clientSubnet === $serverSubnet;
+
+        return view('check-network', [
+            'sameNetwork' => $sameNetwork,
+            'clientIp' => $clientIp,
+            'serverIp' => $serverIp,
+        ]);
+    }
 }

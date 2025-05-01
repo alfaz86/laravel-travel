@@ -55,15 +55,15 @@ class ScheduleResource extends Resource
                         TextInput::make('available_seats')
                             ->label('Kursi Tersedia')
                             ->readOnly()
-                            ->visible( fn($get) => $get('available_seats') !== null),
+                            ->visible(fn($get) => $get('available_seats') !== null),
                         TextInput::make('number_plate')
                             ->label('Plat Nomor')
                             ->readOnly()
-                            ->visible( fn($get) => $get('number_plate') !== null),
+                            ->visible(fn($get) => $get('number_plate') !== null),
                         TextInput::make('type')
                             ->label('Jenis')
                             ->readOnly()
-                            ->visible( fn($get) => $get('type') !== null),
+                            ->visible(fn($get) => $get('type') !== null),
                     ]),
                 TimePicker::make('departure_time')
                     ->label('Waktu Keberangkatan')
@@ -73,9 +73,9 @@ class ScheduleResource extends Resource
                     ->required(),
                 Select::make('origin_id')
                     ->relationship(
-                        name: 'origin', 
+                        name: 'origin',
                         titleAttribute: 'name',
-                        modifyQueryUsing: fn(Builder $query)=> $query->orderBy('id','asc'),
+                        modifyQueryUsing: fn(Builder $query) => $query->orderBy('id', 'asc'),
                     )
                     ->createOptionForm([
                         Forms\Components\TextInput::make('name')
@@ -89,9 +89,9 @@ class ScheduleResource extends Resource
                     ->required(),
                 Select::make('destination_id')
                     ->relationship(
-                        name: 'destination', 
+                        name: 'destination',
                         titleAttribute: 'name',
-                        modifyQueryUsing: fn(Builder $query)=> $query->orderBy('id','asc'),
+                        modifyQueryUsing: fn(Builder $query) => $query->orderBy('id', 'asc'),
                     )
                     ->createOptionForm([
                         Forms\Components\TextInput::make('name')
@@ -103,7 +103,7 @@ class ScheduleResource extends Resource
                     ])
                     ->label('Tujuan')
                     ->required(),
-                    
+
                 TextInput::make('price')
                     ->label('Harga')
                     ->mask(RawJs::make('$money($input)'))
@@ -111,10 +111,11 @@ class ScheduleResource extends Resource
                     ->numeric()
                     ->required(),
 
+
                 Section::make('Operasional')
                     ->schema([
                         CheckboxList::make('active_days')
-                            ->label('')
+                            ->label('Hari Operasional')
                             ->options([
                                 'Monday' => 'Senin',
                                 'Tuesday' => 'Selasa',
@@ -124,8 +125,19 @@ class ScheduleResource extends Resource
                                 'Saturday' => 'Sabtu',
                                 'Sunday' => 'Minggu',
                             ])
+                            ->default([
+                                'Monday',
+                                'Tuesday',
+                                'Wednesday',
+                                'Thursday',
+                                'Friday',
+                                'Saturday',
+                                'Sunday',
+                            ])
+                            ->columns(7)
                             ->required(),
                     ])
+
             ]);
     }
 
@@ -135,7 +147,8 @@ class ScheduleResource extends Resource
             ->columns([
                 TextColumn::make('bus.name')
                     ->label('Nama Bus')
-                    ->url(fn (Schedule $schedule) => "/admin/buses/{$schedule->bus->id}/edit"),
+                    ->searchable('name')
+                    ->url(fn(Schedule $schedule) => "/admin/buses/{$schedule->bus->id}/edit"),
                 TextColumn::make('departure_time')
                     ->label('Waktu Keberangkatan'),
                 TextColumn::make('available_seats')
@@ -150,7 +163,7 @@ class ScheduleResource extends Resource
                 ViewColumn::make('active_days')
                     ->label('Operasional')
                     ->view('filament.tables.columns.active_days_badge')
-                
+
             ])
             ->filters([
                 //
