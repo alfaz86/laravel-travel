@@ -2,9 +2,13 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Exports\BusExporter;
+use App\Filament\Imports\BusImporter;
 use App\Filament\Resources\BusResource\Pages;
 use App\Filament\Resources\BusResource\RelationManagers;
 use App\Models\Bus;
+use Filament\Actions\Exports\Enums\ExportFormat;
+use Filament\Actions\Exports\Models\Export;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -74,6 +78,18 @@ class BusResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ])
+            ->headerActions([
+                Tables\Actions\ImportAction::make('Import Bus')
+                    ->importer(BusImporter::class),
+                Tables\Actions\ExportAction::make('Export Bus')
+                    ->exporter(BusExporter::class)
+                    ->fileName('data-bus-' . now()->timestamp)
+                    ->label('Ekspor bus')
+                    ->color('primary')
+                    ->formats([
+                        ExportFormat::Xlsx,
+                    ]),
             ]);
     }
 
@@ -91,5 +107,39 @@ class BusResource extends Resource
             'create' => Pages\CreateBus::route('/create'),
             'edit' => Pages\EditBus::route('/{record}/edit'),
         ];
+    }
+
+    public function export(Export $export)
+    {
+        $user = auth()->user();
+        $targetUrl = route('buses.export', [
+            'export' => $export->id,
+            'type' => 'notification',
+        ]);
+
+        $notification = $user->unreadNotifications
+            ->filter(function ($notification) use ($targetUrl) {
+                $data = $notification->data;
+
+                if (is_string($data)) {
+                    $data = json_decode($data, true);
+                }
+
+                return isset($data['actions'][0]['url']) && $data['actions'][0]['url'] === $targetUrl;
+            })
+            ->first();
+
+        if ($notification) {
+            $notification->markAsRead();
+        }
+
+        if ($export->file_data) {
+            return response($export->file_data, 200, [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition' => 'attachment; filename="data-laporan-' . $export->id . '.xlsx"',
+            ]);
+        }
+
+        abort(404, 'File not found.');
     }
 }

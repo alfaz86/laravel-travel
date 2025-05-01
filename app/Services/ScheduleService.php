@@ -19,9 +19,9 @@ class ScheduleService
         return $cache_schedules;
     }
 
-    public function calculateIntervalTimeToBooking(Carbon $carbon): string
+    public function calculateIntervalTimeToBooking(): string
     {
-        return $carbon::now('Asia/Jakarta')->addHour()->format('H:i:s');
+        return Carbon::now('Asia/Jakarta')->addHour()->format('H:i:s');
     }
 
     public function getDayOfWeek(string $date): string

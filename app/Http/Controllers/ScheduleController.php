@@ -29,7 +29,7 @@ class ScheduleController extends Controller
         $carbon = $this->carbon;
         $date = $carbon::parse($cache_schedules['date']);
 
-        $intervalTimeToBooking = $this->scheduleService->calculateIntervalTimeToBooking($carbon);
+        $intervalTimeToBooking = $this->scheduleService->calculateIntervalTimeToBooking();
         $dayOfWeek = $this->scheduleService->getDayOfWeek($cache_schedules['date']);
         $schedules = $this->scheduleService->fetchSchedules(
             $cache_schedules,
